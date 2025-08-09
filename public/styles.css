@@ -1,0 +1,86 @@
+body {
+  font-family: 'Yu Mincho', 'Noto Serif JP', 'MS Mincho', serif;
+  background: #fdf6ec;
+  text-align: center;
+  padding: 20px;
+  margin:0;
+  padding:0;
+}
+
+header{
+  background-color: #71A95A;
+  padding: 10px;
+  position: sticky;
+}
+
+header p{
+  font-family: "IM Fell DW Pica SC", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 30px;
+  padding: 0;
+  text-align: left;
+  padding-left: 50px;
+}
+
+h1 {
+  color: #333;
+}
+
+canvas {
+  border: 2px dashed #aaa;
+  background: white;
+  cursor: crosshair;
+  margin-top: 10px;
+}
+
+button,
+select {
+  margin: 10px 5px;
+  padding: 10px 20px;
+  background-color: #f39c12;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+select {
+  background-color: #fff;
+  color: #333;
+  border: 2px solid #f39c12;
+}
+
+button:hover {
+  background-color: #d68910;
+}
+
+#result {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#meaningBox {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #444;
+  font-weight: bold;
+}
+
+#readingBox {
+  margin-top: 5px;
+  font-size: 16px;
+  color: #555;
+}
+
+footer{
+  background-color: #262D28;
+  padding: 25px;
+}
+
+footer p{
+  font-size: 20px;
+  color: #fff;
+}
