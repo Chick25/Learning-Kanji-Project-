@@ -2,41 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kanji Writing Practice</title>
+  <title>Kanji Writing Practice (API)</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <p>Learning Kanji</p>
-
-  </header>
 
   <h1>Kanji Writing Practice</h1>
+  <div class="container">
+    <div class="left">
+      <!-- Để trống -->
+    </div>
 
-  <label for="kanjiSelect">Select Kanji: </label>
-  <select id="kanjiSelect" onchange="selectKanji()"></select>
-  <button onclick="randomKanji()">🔀 Random Kanji</button>
+    <div class="center">
+      <canvas id="canvas" width="400" height="400"></canvas>
+      <div id="meaningBox"></div>
+      <div id="readingBox"></div>
+      <br>
+      <button onclick="checkResult()">✅ Check Answer</button>
+      <button onclick="clearCanvas()">❌ Clear Drawing</button>
+      <div id="result"></div>
+    </div>
 
-  <br>
-  <canvas id="canvas" width="400" height="400"></canvas>
+    <div class="right">
+      <h3>Select Kanji</h3>
+      <button onclick="randomKanji()">🔀 Random</button>
+      <div class="kanji-grid" id="kanjiGrid"></div>
+    </div>
+  </div>
 
-  <div id="meaningBox"></div>
-  <div id="readingBox"></div>
-
-  <br>
-  <button onclick="checkResult()">✅ Check Answer</button>
-  <button onclick="clearCanvas()">❌ Clear Drawing</button>
-
-  <div id="result"></div>
-
-  <footer>
-    <p>CTTNHH 2 thanh vien</p>
-  </footer>
-
+  <!-- Thư viện chuyển kana -> romaji -->
+  <script src="https://cdn.jsdelivr.net/npm/wanakana@5.0.2/wanakana.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

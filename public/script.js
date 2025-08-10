@@ -1,64 +1,8 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const kanjiSelect = document.getElementById("kanjiSelect");
+const kanjiGrid = document.getElementById("kanjiGrid");
 
-const kanjiList = [
-  "日", "月", "火", "水", "木", "金", "土", "山", "川", "田",
-  "人", "口", "目", "耳", "手", "足", "力", "女", "男", "子",
-  "大", "小", "中", "上", "下", "左", "右", "学", "生", "校"
-];
-
-const kanjiMeanings = {
-  "日": "Sun / Day", "月": "Moon / Month", "火": "Fire", "水": "Water",
-  "木": "Tree / Wood", "金": "Gold / Money", "土": "Earth / Soil", "山": "Mountain",
-  "川": "River", "田": "Rice Field", "人": "Person", "口": "Mouth", "目": "Eye",
-  "耳": "Ear", "手": "Hand", "足": "Foot / Leg", "力": "Strength / Power",
-  "女": "Woman", "男": "Man", "子": "Child", "大": "Big", "小": "Small",
-  "中": "Middle / Inside", "上": "Up / Above", "下": "Down / Below", "左": "Left",
-  "右": "Right", "学": "Study / Learn", "生": "Life / Birth", "校": "School"
-};
-
-const kanjiReadings = {
-  "日": { onyomi: "ニチ / ジツ", kunyomi: "ひ / -び / -か", romaji: "nichi / jitsu — hi / -bi / -ka" },
-  "月": { onyomi: "ゲツ / ガツ", kunyomi: "つき", romaji: "getsu / gatsu — tsuki" },
-  "火": { onyomi: "カ", kunyomi: "ひ / -び / ほ-", romaji: "ka — hi / -bi / ho-" },
-  "水": { onyomi: "スイ", kunyomi: "みず", romaji: "sui — mizu" },
-  "木": { onyomi: "モク / ボク", kunyomi: "き / こ-", romaji: "moku / boku — ki / ko-" },
-  "金": { onyomi: "キン / コン", kunyomi: "かね / かな-", romaji: "kin / kon — kane / kana-" },
-  "土": { onyomi: "ド / ト", kunyomi: "つち", romaji: "do / to — tsuchi" },
-  "山": { onyomi: "サン / ザン", kunyomi: "やま", romaji: "san / zan — yama" },
-  "川": { onyomi: "セン", kunyomi: "かわ", romaji: "sen — kawa" },
-  "田": { onyomi: "デン", kunyomi: "た", romaji: "den — ta" },
-  "人": { onyomi: "ジン / ニン", kunyomi: "ひと", romaji: "jin / nin — hito" },
-  "口": { onyomi: "コウ / ク", kunyomi: "くち", romaji: "kou / ku — kuchi" },
-  "目": { onyomi: "モク / ボク", kunyomi: "め / -め", romaji: "moku / boku — me / -me" },
-  "耳": { onyomi: "ジ", kunyomi: "みみ", romaji: "ji — mimi" },
-  "手": { onyomi: "シュ", kunyomi: "て / た-", romaji: "shu — te / ta-" },
-  "足": { onyomi: "ソク", kunyomi: "あし / た-", romaji: "soku — ashi / ta-" },
-  "力": { onyomi: "リョク / リキ", kunyomi: "ちから", romaji: "ryoku / riki — chikara" },
-  "女": { onyomi: "ジョ / ニョ", kunyomi: "おんな / め", romaji: "jo / nyo — onna / me" },
-  "男": { onyomi: "ダン / ナン", kunyomi: "おとこ", romaji: "dan / nan — otoko" },
-  "子": { onyomi: "シ / ス", kunyomi: "こ", romaji: "shi / su — ko" },
-  "大": { onyomi: "ダイ / タイ", kunyomi: "おお-", romaji: "dai / tai — oo-" },
-  "小": { onyomi: "ショウ", kunyomi: "ちい- / こ / お", romaji: "shou — chii / ko / o" },
-  "中": { onyomi: "チュウ", kunyomi: "なか", romaji: "chuu — naka" },
-  "上": { onyomi: "ジョウ", kunyomi: "うえ / あ- / のぼ-", romaji: "jou — ue / a / nobo" },
-  "下": { onyomi: "カ / ゲ", kunyomi: "した / さが- / くだ-", romaji: "ka / ge — shita / saga / kuda" },
-  "左": { onyomi: "サ", kunyomi: "ひだり", romaji: "sa — hidari" },
-  "右": { onyomi: "ウ / ユウ", kunyomi: "みぎ", romaji: "u / yuu — migi" },
-  "学": { onyomi: "ガク", kunyomi: "まな-", romaji: "gaku — mana" },
-  "生": { onyomi: "セイ / ショウ", kunyomi: "い- / う- / は- / なま", romaji: "sei / shou — i / u / ha / nama" },
-  "校": { onyomi: "コウ", kunyomi: "", romaji: "kou" }
-};
-
-let currentKanji = kanjiList[0];
-
-kanjiList.forEach(k => {
-  const option = document.createElement("option");
-  option.value = k;
-  option.textContent = k;
-  kanjiSelect.appendChild(option);
-});
+let currentKanji = null;
 
 const drawCanvas = document.createElement("canvas");
 drawCanvas.width = 400;
@@ -87,33 +31,33 @@ function drawTemplate(kanji) {
   templateCtx.fillText(kanji, 200, 200);
 }
 
-function updateKanjiInfo() {
-  document.getElementById("meaningBox").textContent = `Meaning: ${kanjiMeanings[currentKanji] || "Unknown"}`;
-  const reading = kanjiReadings[currentKanji];
+async function updateKanjiInfoFromAPI(kanji) {
+  const res = await fetch(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(kanji)}`);
+  const data = await res.json();
+  const onyomi = (data.on_readings || []).join(" / ");
+  const kunyomi = (data.kun_readings || []).join(" / ");
+  const romajiOn = onyomi ? onyomi.split(" / ").map(r => wanakana.toRomaji(r)).join(" / ") : "";
+  const romajiKun = kunyomi ? kunyomi.split(" / ").map(r => wanakana.toRomaji(r)).join(" / ") : "";
+
+  document.getElementById("meaningBox").textContent =
+    `Meaning: ${data.meanings ? data.meanings.join(", ") : "Unknown"}`;
   document.getElementById("readingBox").textContent =
-    reading
-      ? `Reading: Onyomi: ${reading.onyomi} | Kunyomi: ${reading.kunyomi} | Romaji: ${reading.romaji}`
-      : "Reading: Unknown";
+    `Onyomi: ${onyomi} (${romajiOn}) | Kunyomi: ${kunyomi} (${romajiKun})`;
 }
 
-function selectKanji() {
-  currentKanji = kanjiSelect.value;
+function selectKanji(kanji) {
+  currentKanji = kanji;
   drawCtx.clearRect(0, 0, 400, 400);
   drawTemplate(currentKanji);
   renderAll();
   document.getElementById("result").textContent = "";
-  updateKanjiInfo();
+  updateKanjiInfoFromAPI(currentKanji);
 }
 
 function randomKanji() {
-  const index = Math.floor(Math.random() * kanjiList.length);
-  currentKanji = kanjiList[index];
-  kanjiSelect.value = currentKanji;
-  drawCtx.clearRect(0, 0, 400, 400);
-  drawTemplate(currentKanji);
-  renderAll();
-  document.getElementById("result").textContent = "";
-  updateKanjiInfo();
+  const cells = Array.from(document.querySelectorAll(".kanji-cell"));
+  const randomCell = cells[Math.floor(Math.random() * cells.length)];
+  selectKanji(randomCell.textContent);
 }
 
 function clearCanvas() {
@@ -189,27 +133,33 @@ function checkResult() {
   }
 
   document.getElementById("result").textContent = resultText;
-
-  const imageData = drawCanvas.toDataURL("image/png"); // xuất ảnh base64
-  fetch('http://localhost:3000/check-kanji', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      kanji: currentKanji,
-      accuracy: accuracy,
-      imageData: imageData
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log("Phản hồi từ server:", data);
-    alert(data.feedback); // ví dụ hiển thị phản hồi
-  })
-  .catch(err => console.error("Lỗi kết nối backend:", err));
-
-
 }
 
-drawTemplate(currentKanji);
-renderAll();
-updateKanjiInfo();
+async function loadKanjiList() {
+  const res = await fetch("https://kanjiapi.dev/v1/kanji/grade-1");
+  const list = await res.json();
+  list.forEach(k => {
+    const cell = document.createElement("div");
+    cell.className = "kanji-cell";
+    cell.textContent = k;
+    cell.onclick = () => selectKanji(k);
+    kanjiGrid.appendChild(cell);
+  });
+  selectKanji(list[0]);
+}
+
+async function sendResultToServer(kanji, accuracy) {
+  const imageData = canvas.toDataURL(); // lấy ảnh base64 từ canvas
+  const res = await fetch('/check-kanji', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ kanji, accuracy, imageData })
+  });
+  const data = await res.json();
+  console.log(data.feedback); // phản hồi từ server
+}
+
+
+
+loadKanjiList();
+sendResultToServer(currentKanji, accuracy);
