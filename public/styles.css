@@ -4,6 +4,20 @@ body {
   margin: 0;
   padding: 0;
 }
+
+header{
+  background-color: #71A95A;
+  padding: 15px;
+}
+
+header p{
+  font-weight: 500;
+  font-size: 30px;
+  /* padding: 0; */
+  margin: 0;
+  margin-left: 15px;
+}
+
 h1 {
   color: #333;
   text-align: center;
@@ -32,10 +46,10 @@ h1 {
 }
 
 /* test */
-.right h3{
-  
+.rightheader{
+  display: flex;
+  justify-content: space-around;
 }
-
 /* test */
 
 canvas {
@@ -91,4 +105,13 @@ button:hover {
 }
 .kanji-cell:hover {
   background: #ffe4b5;
+}
+footer{
+  background-color: #323232;
+  padding: 30px;
+}
+footer p{
+  font-size: large;
+  color: #fdf6ec;
+  margin: 0;
 }

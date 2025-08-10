@@ -7,6 +7,10 @@
 </head>
 <body>
 
+  <header>
+    <p>Learning Kanji</p>
+  </header>
+
   <h1>Kanji Writing Practice</h1>
   <div class="container">
     <div class="left">
@@ -24,14 +28,24 @@
     </div>
 
     <div class="right">
-      <h3>Select Kanji</h3>
-      <button onclick="randomKanji()">🔀 Random</button>
+      <div class="rightheader">
+        <h3>Select Kanji</h3>
+        <button onclick="randomKanji()">🔀 Random</button>
+      </div>
       <div class="kanji-grid" id="kanjiGrid"></div>
     </div>
   </div>
 
+  <footer>
+    <p>CTTNHH 2 thanh vien</p>
+  </footer>
+
+
   <!-- Thư viện chuyển kana -> romaji -->
   <script src="https://cdn.jsdelivr.net/npm/wanakana@5.0.2/wanakana.min.js"></script>
   <script src="script.js"></script>
+
+
+
 </body>
 </html>
