@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Kanji - Login</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Header */
+        header {
+            background-color: #71A95A; 
+            padding: 10px 20px;
+            color: black;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        header span {
+            display: block;
+        }
+        /* Main content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        main h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .login-form {
+            width: 100%;
+            max-width: 300px;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #999;
+            font-size: 14px;
+            border-radius: 15px;
+        }
+        .login-btn {
+            background-color: #F9B139;
+            border: 1px solid #999;
+            padding: 8px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .login-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .create-account {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+        /* Social login buttons */
+        .social-login {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .social-login p {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .btn-facebook {
+            background-color: #3b5998;
+            color: white;
+            border: none;
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-google {
+            background-color: #db4437;
+            color: white;
+            border: none;
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-facebook:hover {
+            background-color: #2d4373;
+        }
+        .btn-google:hover {
+            background-color: #c33d2d;
+        }
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: left;
+            padding: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <span>LEARNING</span>
+        <span>KANJI</span>
+    </header>
+
+    <!-- Main content -->
+    <main>
+        <h1>Login</h1>
+        <form class="login-form">
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+
+            <div class="login-footer">
+                <button type="submit" class="login-btn">Log in</button>
+                <a href="#" style="font-size: 12px; text-decoration: none; color: black;">Forgot your password?</a>
+            </div>
+
+            <!-- Link Create Account -->
+            <div class="create-account">
+                <a href="signup.html" style="text-decoration: none; color: black;">Create account</a>
+            </div>
+
+            <!-- Social login -->
+            <div class="social-login">
+                <p>Or login with</p>
+                <button type="button" class="btn-facebook">Login with Facebook</button>
+                <button type="button" class="btn-google">Login with Google</button>
+            </div>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        CTTNHH 2 THÀNH VIÊN
+    </footer>
+</body>
+</html>
