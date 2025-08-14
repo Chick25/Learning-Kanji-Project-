@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ sơ học Kanji</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .profile-card {
+      background: white;
+      width: 350px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+      padding: 20px;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 10px;
+      border: 3px solid #ff4d4d;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 10px 0 5px;
+    }
+    p {
+      color: #666;
+      font-size: 14px;
+    }
+    .progress-container {
+      margin: 20px 0;
+      text-align: left;
+    }
+    .progress-label {
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: #333;
+    }
+    .progress-bar {
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 10px;
+      background: linear-gradient(90deg, #ff4d4d, #ff9966);
+      width: 65%; /* % tiến độ */
+    }
+    .kanji-list {
+      margin-top: 15px;
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .social-links a {
+      display: inline-block;
+      margin: 10px;
+      color: #ff4d4d;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-card">
+    <img class="avatar" src="avatar.jpg" alt="Ảnh đại diện">
+    <h1>Nguyễn Văn A</h1>
+    <p>Học viên Kanji - Mục tiêu N3</p>
+
+    <div class="progress-container">
+      <div class="progress-label">Tiến độ: 325/500 Kanji</div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="kanji-list">
+      <strong>Đã học:</strong> 日, 月, 山, 川, 木, 水, 火...<br>
+      <strong>Đang học:</strong> 愛, 試, 習, 銀...
+    </div>
+
+    <div class="social-links">
+      <a href="#">Facebook</a>
+      <a href="#">Zalo</a>
+    </div>
+  </div>
+</body>
+</html>

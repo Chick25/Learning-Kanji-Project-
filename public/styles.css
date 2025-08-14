@@ -18,27 +18,49 @@ header p{
   margin-left: 15px;
 }
 
-h1 {
+.underheader{
+  position: relative;
+  text-align: center;
+
+}
+
+.underheader h1 {
   color: #333;
   text-align: center;
+  text-align: center;
+  margin: 20px;
+  padding: 5px;
 }
+
+
+.user_icon img{
+  padding: 5px;
+  object-fit: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  top: -1px;
+  right: 10px;
+}
+
 .container {
   display: flex;
   min-height: 100vh;
 }
 .left {
-  flex: 1;
+  flex: 2;
   background: #fdf6ec;
   border-right: 1px solid #ddd;
   padding: 10px;
 }
 .center {
-  flex: 2;
+  flex: 3;
   padding: 20px;
   text-align: center;
 }
 .right {
-  flex: 1;
+  flex: 2;
   background: #fffaf0;
   border-left: 1px solid #ddd;
   padding: 10px;

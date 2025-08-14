@@ -159,7 +159,18 @@ async function sendResultToServer(kanji, accuracy) {
   console.log(data.feedback); // phản hồi từ server
 }
 
+// local
+document.addEventListener('DOMContentLoaded', ()=>{
+  const userIcon = document.getElementById('userIcon');
+  const username = localStorage.getItem('username');
 
+  if(username){
+    userIcon.href = '/profile';
+  }else{
+    userIcon.href = '/register';
+  }
+
+});
 
 loadKanjiList();
 sendResultToServer(currentKanji, accuracy);

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kanji Writing Practice (API)</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <header>
+    <p>Learning Kanji</p>
+  </header>
+  <div class="underheader">
+    <h1>Kanji Writing Practice</h1>
+    <div class="user_icon">
+      <a href="#" id="userIcon">
+        <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user_img"/>
+      </a>
+    </div>
+  </div>
+  
+  <div class="container">
+    
+    <div class="left">
+      <!-- Để trống -->
+    </div>
+
+    <div class="center">
+      <canvas id="canvas" width="400" height="400"></canvas>
+      <div id="meaningBox"></div>
+      <div id="readingBox"></div>
+      <br>
+      <button onclick="checkResult()">✅ Check Answer</button>
+      <button onclick="clearCanvas()">❌ Clear Drawing</button>
+      <div id="result"></div>
+    </div>
+
+    <div class="right">
+      <div class="rightheader">
+        <h3>Select Kanji</h3>
+        <button onclick="randomKanji()">🔀 Random</button>
+      </div>
+      <div class="kanji-grid" id="kanjiGrid"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>CTTNHH 2 thanh vien</p>
+  </footer>
+
+
+  <!-- Thư viện chuyển kana -> romaji -->
+  <script src="https://cdn.jsdelivr.net/npm/wanakana@5.0.2/wanakana.min.js"></script>
+  <script src="../script.js"></script>
+
+
+
+</body>
+</html>
