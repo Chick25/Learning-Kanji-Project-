@@ -96,7 +96,7 @@ function getMousePos(e) {
   };
 }
 
-function checkResult() {
+async function checkResult() {
   const userData = drawCtx.getImageData(0, 0, 400, 400).data;
   const templateData = templateCtx.getImageData(0, 0, 400, 400).data;
 
@@ -133,6 +133,33 @@ function checkResult() {
   }
 
   document.getElementById("result").textContent = resultText;
+
+  const username = localStorage.getItem('username');
+  const level = document.getElementById('levelSelect');
+  const kanji = currentKanji;
+
+  if(username && level && kanji){
+    try{
+      const res = await fetch('/learn', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          username: username,
+          level: level.value,
+          kanji: kanji
+        })
+      });
+
+      const data = await res.json();
+      console.log('Saved: ', data);
+
+    }catch(err){
+      console.log('Something wrong', err);
+    }
+  }
+
+  sendResultToServer(kanji, accuracy)
+
 }
 
 async function loadKanjiList() {
@@ -149,6 +176,7 @@ async function loadKanjiList() {
 }
 
 async function sendResultToServer(kanji, accuracy) {
+  if(!kanji) return;
   const imageData = canvas.toDataURL(); // lấy ảnh base64 từ canvas
   const res = await fetch('/check-kanji', {
     method: 'POST',
@@ -167,10 +195,67 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if(username){
     userIcon.href = '/profile';
   }else{
-    userIcon.href = '/register';
+    userIcon.href = '/login';
   }
 
 });
+
+// select level
+async function loadKanjiByLevel() {
+  const level = document.getElementById("levelSelect").value;
+  if (!level) return;
+
+  const grid = document.getElementById("kanjiGrid");
+  grid.innerHTML = "⏳ Đang tải...";
+
+  try {
+    const res = await fetch(`https://kanjiapi.dev/v1/kanji/${level}`);
+    const kanjiList = await res.json();
+
+    grid.innerHTML = "";
+    kanjiList.forEach(k => {
+      const cell = document.createElement("div");
+      cell.className = "kanji-cell";
+      cell.textContent = k;
+      cell.onclick = () => selectKanji(k);
+      grid.appendChild(cell);
+    });
+
+    if (kanjiList.length > 0) {
+      selectKanji(kanjiList[0]);
+    }
+
+  } catch (error) {
+    grid.innerHTML = "⚠️ Lỗi tải dữ liệu!";
+    console.error(error);
+  }
+}
+
+const img = document.getElementById('preview');
+img.src = localStorage.getItem('profileImage')
+//   if(savedImage){
+//     img.src = savedImage;
+//   }
+
+//   img.addEventListener('click', (e)=>{
+//     // e.preventDefault();
+//     fileInput.click();
+//   });
+
+//   fileInput.addEventListener('change', (event)=>{
+//     const file = event.target.files[0];
+//     if(file){
+//       const reader = new FileReader();
+//       reader.onload =  (e) =>{
+//         img.src = e.target.result;
+//         localStorage.setItem('profileImage', e.target.result);
+//       };
+//       reader.readAsDataURL(file)
+//     }
+//   })
+
+
+
 
 loadKanjiList();
 sendResultToServer(currentKanji, accuracy);

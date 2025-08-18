@@ -14,7 +14,8 @@
     <h1>Kanji Writing Practice</h1>
     <div class="user_icon">
       <a href="#" id="userIcon">
-        <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user_img"/>
+        <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user_img" id="preview"/>
+        <!-- <input type="file" id="fileInput" accept="image/*"> -->
       </a>
     </div>
   </div>
@@ -37,7 +38,16 @@
 
     <div class="right">
       <div class="rightheader">
-        <h3>Select Kanji</h3>
+        <h3>Select Level</h3>
+        <select id="levelSelect" class="levelSelect" onchange="loadKanjiByLevel()">
+          <option value="">-- Chọn cấp độ --</option>
+          <option value="grade-1">N5 (Grade 1)</option>
+          <!-- <option value="grade-1">N5 (Grade 2)</option> -->
+          <option value="grade-2">N4 (Grade 2)</option>
+          <option value="grade-3">N3 (Grade 3)</option>
+          <option value="grade-4">N2 (Grade 4)</option>
+          <option value="grade-5">N1 (Grade 5)</option>
+        </select>
         <button onclick="randomKanji()">🔀 Random</button>
       </div>
       <div class="kanji-grid" id="kanjiGrid"></div>

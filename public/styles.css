@@ -44,6 +44,10 @@ header p{
   right: 10px;
 }
 
+#fileInput{
+  display: none;
+}
+
 .container {
   display: flex;
   min-height: 100vh;
@@ -65,14 +69,24 @@ header p{
   border-left: 1px solid #ddd;
   padding: 10px;
   overflow-y: auto;
+
 }
 
 /* test */
 .rightheader{
   display: flex;
   justify-content: space-around;
+
 }
 /* test */
+
+.levelSelect{
+  border-radius: 5px;
+  border-color: white;
+  background-color: #fcfcfc;
+
+}
+
 
 canvas {
   border: 2px dashed #aaa;

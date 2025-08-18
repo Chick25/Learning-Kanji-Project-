@@ -30,9 +30,19 @@ mongoose.connect(
 const userSchema = new mongoose.Schema({
   username: {type: String, unique: true},
   email: {type: String, unique: true},
-  password: String
+  password: String,
+  progress:{
+    "grade-1": { type: [String], default: [] },
+    "grade-2": { type: [String], default: [] },
+    "grade-3": { type: [String], default: [] },
+    "grade-4": { type: [String], default: [] },
+    "grade-5": { type: [String], default: [] },
+    // "grade-6": { type: [String], default: [] },
+  }
+
 });
 const User = mongoose.model('User',userSchema);
+
 
 // register
 
@@ -115,6 +125,61 @@ app.post('/check-kanji', (req, res) => {
     feedback: feedback
   });
 });
+
+app.post('/learn', async(req, res)=>{
+
+  try{
+    const {username, level, kanji} = req.body;
+
+    if(!username || !level || !kanji){
+      return res.status(400).json({error:'Missing Kanji'});
+    }  
+
+    const updatedUser = await User.findOneAndUpdate(
+      { username },
+      { $addToSet: {[`progress.${level}`]: kanji} },
+      { new: true }
+    );
+
+    if(!updatedUser){
+      return res.status(400).json({error: 'Not found user'});
+    }
+
+    console.log("Update progress:", username, level, kanji);
+
+    res.json({
+      message: 'Update complete',
+      progress: updatedUser.progress
+    });
+
+    // console.log("Update progress:", username, level, kanji);
+
+  }catch(err){
+    console.log(err);
+    res.status(500).json({error: 'Server is wrong'});
+  }
+});
+
+app.get('/learn', async(req, res)=>{
+  try{
+    const {username, level} = req.query;
+
+    const user = await User.findOne({username});
+    if(!user){
+      return res.status(404).json({err: 'Not found user'});
+    }
+
+    const learnedCount = user.progress[level]?.length || 0;
+
+    res.json({
+      progress: learnedCount
+    });
+
+  }catch(err){
+    res.status(500).json({err: 'Server is wrong'});
+  }
+});
+
 
 app.listen(3000, () => {
   console.log('Server chạy ở http://localhost:3000');

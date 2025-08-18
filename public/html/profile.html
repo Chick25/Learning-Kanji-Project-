@@ -1,101 +1,330 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hồ sơ học Kanji</title>
-  <style>
+<meta charset="UTF-8">
+<title>Trang Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+        font-family: 'Poppins', sans-serif;
+        background: #f4f6f8;
+        color: #333;
     }
-    .profile-card {
-      background: white;
-      width: 350px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      overflow: hidden;
-      text-align: center;
-      padding: 20px;
-    }
-    .avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-top: 10px;
-      border: 3px solid #ff4d4d;
-    }
-    h1 {
-      font-size: 24px;
-      margin: 10px 0 5px;
-    }
-    p {
-      color: #666;
-      font-size: 14px;
-    }
-    .progress-container {
-      margin: 20px 0;
+    
+    header{
+      background-color: #71A95A;
+      padding: 18px 25px;
       text-align: left;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
     }
-    .progress-label {
-      font-size: 14px;
-      margin-bottom: 4px;
-      color: #333;
+
+    main {
+        flex: 1; /* Đẩy footer xuống dưới */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 15px;
     }
+
+    .profile-container {
+        /* max-width: 420px; */
+        min-height: 70vh;
+        width: 100%;
+        height: auto;
+        background: white;
+        padding: 25px 20px;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.2s;
+    }
+
+    .profile-container:hover {
+        transform: translateY(-5px);
+    }
+
+    .user_icon img{
+      object-fit: cover;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #71A95A;
+      margin-bottom: 10px;
+      transition: transform 0.3s;
+    }
+    .user_icon img:hover{
+      transform: scale(1.05);
+    }
+
+    #username{
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    .level-select {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        gap: 8px;
+    }
+    .level-select span {
+        flex: 1;
+        padding: 8px;
+        border-radius: 8px;
+        background: #e8f5e9;
+        color: #71A95A;
+        font-weight: 500;
+        text-align: center;
+        font-size: 14px;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    .level-select span:hover{
+        background: #71A95A;
+        color: #fff;
+    }
+
+    .progress-section {
+        margin-top: 15px;
+    }
+
     .progress-bar {
-      background: #eee;
-      border-radius: 10px;
-      overflow: hidden;
+        background: #eee;
+        border-radius: 12px;
+        overflow: hidden;
+        height: 14px;
+        margin-bottom: 8px;
     }
     .progress-fill {
-      height: 10px;
-      background: linear-gradient(90deg, #ff4d4d, #ff9966);
-      width: 65%; /* % tiến độ */
+        background: linear-gradient(90deg, #71A95A, #9ccc65);
+        height: 100%;
+        width: 0%; /* Tiến độ */
+        transition: width 0.5s ease-in-out;
     }
-    .kanji-list {
-      margin-top: 15px;
-      text-align: left;
+    .progress-text {
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+    }
+
+    footer{
+        background-color: #323232;
+        padding: 20px;
+        text-align: center;
+    }
+    footer p{
       font-size: 14px;
-      line-height: 1.6;
+      color: #fdf6ec;
     }
-    .social-links a {
-      display: inline-block;
-      margin: 10px;
-      color: #ff4d4d;
-      text-decoration: none;
-      font-weight: bold;
+
+    .logout-wrap {
+    display: flex;
+    justify-content: flex-end; /* đẩy nút sang phải */
+    padding: 15px 25px;
+    background: #f4f6f8; /* cùng màu nền để không lộ */
     }
-  </style>
+
+    /* 🔥 Nút Logout cố định góc dưới bên phải */
+    .logout-btn {
+        /* position: fixed; */
+        
+        width: 10%;
+        background: #ff4d4d;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        transition: background 0.3s ease;
+        }
+    .logout-btn:hover {
+        background: #e63939;
+    }
+    #fileInput{
+      display: none;
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+        .profile-container {
+            padding: 20px 15px;
+        }
+        .user_icon img {
+            width: 70px;
+            height: 70px;
+        }
+        #username {
+            font-size: 18px;
+        }
+    }
+</style>
 </head>
 <body>
-  <div class="profile-card">
-    <img class="avatar" src="avatar.jpg" alt="Ảnh đại diện">
-    <h1>Nguyễn Văn A</h1>
-    <p>Học viên Kanji - Mục tiêu N3</p>
 
-    <div class="progress-container">
-      <div class="progress-label">Tiến độ: 325/500 Kanji</div>
-      <div class="progress-bar">
-        <div class="progress-fill"></div>
+  <header>
+    Learning Kanji
+  </header>
+
+  <main>
+    <div class="profile-container">
+      <div class="user_icon">
+        <a id="userIcon">
+          <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user_img" id="preview"/>
+          <input type="file" id="fileInput" accept="image/*">
+        </a>
+      </div>
+      <p id="username"></p>
+
+      <div class="level-select">
+          <span id='grade-1'>N5</span>
+          <span id='grade-2'>N4</span>
+          <span id='grade-3'>N3</span>
+          <span id='grade-4'>N2</span>
+          <span id='grade-5'>N1</span>
+      </div>
+
+      <div class="learned">
+        <p id=kanjiLearned></p>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="progress-text" id="progressText">Tiến độ: </p>
       </div>
     </div>
+  </main>
 
-    <div class="kanji-list">
-      <strong>Đã học:</strong> 日, 月, 山, 川, 木, 水, 火...<br>
-      <strong>Đang học:</strong> 愛, 試, 習, 銀...
-    </div>
-
-    <div class="social-links">
-      <a href="#">Facebook</a>
-      <a href="#">Zalo</a>
-    </div>
+  <!-- ✅ Nút Logout cố định -->
+  <div class="logout-wrap">
+    <button id="btnLogout" class="logout-btn">Đăng xuất</button>
   </div>
+
+  <footer>
+    <p>© 2025 - CTTNHH 2 thành viên</p>
+  </footer>
+
+<script>
+
+  const username = localStorage.getItem('username');
+  document.addEventListener('DOMContentLoaded', ()=>{
+ 
+    const logoutBtn = document.getElementById('btnLogout');
+   
+    if(username){
+      document.getElementById('username').textContent = username;
+    }else{
+      window.location.href='/login';
+    }
+
+    // Xử lý logout
+    logoutBtn.addEventListener('click', ()=>{
+      localStorage.removeItem('username');
+      window.location.href='/login';
+    });
+  });
+
+  // function displaKanjiLearned(){
+  //   const kanjiLearned = document.getElementById('kanjiLearned');
+
+  // }
+  const kanjiLearned = document.getElementById('kanjiLearned');
+
+  const progressText = document.getElementById('progressText');
+
+  const progressFill = document.getElementById('progressFill');
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+   
+    const levels = document.querySelectorAll('.level-select span');
+
+    levels.forEach(level =>{
+      level.addEventListener('click', ()=>{
+        kanjiLearned.textContent = level.textContent;
+        
+        Promise.all([
+          fetch(`https://kanjiapi.dev/v1/kanji/${level.id}`)
+            .then(res=>{
+              if(!res.ok){
+                throw new Error('Error!');
+              }
+              return res.json()
+            }),
+          fetch(`http://localhost:3000/learn?username=${encodeURIComponent(username)}&level=${encodeURIComponent(level.id)}`) 
+
+            .then(res=>{
+              if(!res.ok){
+                throw new Error('Error!');
+              }
+              return res.json()
+            })
+          ])    
+          .then(([data1, data2])=>{
+              
+            progressText.textContent = `Tiến độ: ${data2.progress}/${data1.length}`;
+            // console.log(data1)
+            progressFill.style.height = `${data1.length}%`;
+            progressFill.style.width = `${data2.progress}%`
+          })
+          .catch(error => {
+            console.error("Có lỗi:", error.message);
+          })
+       
+        
+
+      })
+    })
+  });
+
+const fileInput = document.getElementById('fileInput');
+const img = document.getElementById('preview');
+
+const savedImage = localStorage.getItem('profileImage');
+if(savedImage){
+  img.src = savedImage;
+}
+
+
+
+img.addEventListener('click', ()=>{
+  fileInput.click();
+});
+
+fileInput.addEventListener('change', (event)=>{
+  const file = event.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = (e) =>{
+      img.src = e.target.result;
+      localStorage.setItem('profileImage', e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+</script>
+
 </body>
 </html>
