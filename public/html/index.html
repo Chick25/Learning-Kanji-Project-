@@ -20,10 +20,19 @@
     </div>
   </div>
   
+
   <div class="container">
     
-    <div class="left">
-      <!-- Để trống -->
+    <div class="left" id="sidebar">
+      
+        <button id="toggleSidebar" class="toggle-btn">📂</button>
+        <h3>Menu</h3>
+        <ul>
+          <li><a href="/game2">Bài học 1</a></li>
+          <li><a href="#">Bài học 2</a></li>
+          <li><a href="#">Bài học 3</a></li>
+        </ul>
+      
     </div>
 
     <div class="center">
@@ -40,7 +49,7 @@
       <div class="rightheader">
         <h3>Select Level</h3>
         <select id="levelSelect" class="levelSelect" onchange="loadKanjiByLevel()">
-          <option value="">-- Chọn cấp độ --</option>
+          <!-- <option value="">-- Chọn cấp độ --</option> -->
           <option value="grade-1">N5 (Grade 1)</option>
           <!-- <option value="grade-1">N5 (Grade 2)</option> -->
           <option value="grade-2">N4 (Grade 2)</option>

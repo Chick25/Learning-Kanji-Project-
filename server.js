@@ -111,6 +111,10 @@ app.get('/profile', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public/html/profile.html'));
 });
 
+app.get('/game2', (req, res)=>{
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'game2.html'));
+});
+
 // API nhận dữ liệu vẽ từ frontend
 app.post('/check-kanji', (req, res) => {
   const { kanji, accuracy, imageData } = req.body;
