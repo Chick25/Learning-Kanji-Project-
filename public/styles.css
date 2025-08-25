@@ -147,7 +147,43 @@ header p{
 
 }
 
+/* test */
 
+#animContainer{
+  position: absolute;
+  top: 100px;   /* chỉnh cho ngang hàng với canvas */
+  left: 150px;   /* di chuyển thoải mái bên trái */
+  width: 200px;
+  height: 200px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+  border: 2px dashed #aaa;
+  /* position: relative; */
+}
+
+/* đường kẻ dọc */
+#animContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 2px dashed #aaa;
+}
+
+/* đường kẻ ngang */
+#animContainer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 2px dashed #aaa;
+}
 
 canvas {
   border: 2px dashed #aaa;
@@ -155,6 +191,43 @@ canvas {
   cursor: crosshair;
   margin-top: 10px;
 }
+
+#crosshair {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  pointer-events: none; /* để chuột vẫn vẽ được trên canvas */
+}
+
+#crosshair::before,
+#crosshair::after {
+  content: "";
+  position: absolute;
+  /* background: #aaa; */
+  border-left: 2px dashed #aaa;
+
+}
+
+#crosshair::before {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+#crosshair::after {
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+  border-top: 2px dashed #aaa;
+}
+
+
 button {
   margin: 10px 5px;
   padding: 10px 20px;

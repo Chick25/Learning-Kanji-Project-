@@ -14,6 +14,8 @@ templateCanvas.width = 400;
 templateCanvas.height = 400;
 const templateCtx = templateCanvas.getContext("2d");
 
+
+
 function renderAll() {
   ctx.clearRect(0, 0, 400, 400);
   ctx.globalAlpha = 1;

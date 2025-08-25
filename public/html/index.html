@@ -24,19 +24,25 @@
   <div class="container">
     
     <div class="left" id="sidebar">
-      
-        <button id="toggleSidebar" class="toggle-btn">📂</button>
-        <h3>Menu</h3>
-        <ul>
-          <li><a href="/game2">Bài học 1</a></li>
-          <li><a href="#">Bài học 2</a></li>
-          <li><a href="#">Bài học 3</a></li>
-        </ul>
-      
+      <button id="toggleSidebar" class="toggle-btn">📂</button>
+      <h3>Menu</h3>
+      <ul>
+        <li><a href="/game2">Bài học 1</a></li>
+        <li><a href="#">Bài học 2</a></li>
+        <li><a href="#">Bài học 3</a></li>
+      </ul>
+
     </div>
 
+    <div id="animContainer">Chọn chữ Kanji để xem nét viết</div>
+
+
     <div class="center">
-      <canvas id="canvas" width="400" height="400"></canvas>
+      <div style="position: relative; display: inline-block;">
+        <canvas id="canvas" width="400" height="400"></canvas>
+      <div id="crosshair"></div>
+    </div>
+  
       <div id="meaningBox"></div>
       <div id="readingBox"></div>
       <br>
