@@ -14,7 +14,10 @@ templateCanvas.width = 400;
 templateCanvas.height = 400;
 const templateCtx = templateCanvas.getContext("2d");
 
+//kanjisvg
 
+
+let animator = null;
 
 function renderAll() {
   ctx.clearRect(0, 0, 400, 400);
@@ -47,13 +50,47 @@ async function updateKanjiInfoFromAPI(kanji) {
     `Onyomi: ${onyomi} (${romajiOn}) | Kunyomi: ${kunyomi} (${romajiKun})`;
 }
 
-function selectKanji(kanji) {
+async function selectKanji(kanji) {
   currentKanji = kanji;
   drawCtx.clearRect(0, 0, 400, 400);
   drawTemplate(currentKanji);
   renderAll();
   document.getElementById("result").textContent = "";
   updateKanjiInfoFromAPI(currentKanji);
+
+  //test
+  // === Phần SVG Animate ===
+  const url = `https://kanjialive-api.p.rapidapi.com/api/public/kanji/${encodeURIComponent(kanji)}`;
+  const options = {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': 'e5b7cd00f4mshbeb15c8801358a3p17a185jsndb8ade253014', // 🔑 thay key thật
+      'x-rapidapi-host': 'kanjialive-api.p.rapidapi.com'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    const animContainer = document.getElementById("animContainer");
+    animContainer.innerHTML = "";
+
+    if (data.kanji.video && data.kanji.video.mp4) {
+      const video = document.createElement("video");
+      video.src = data.kanji.video.mp4
+      video.controls = true;
+      video.autoplay = true;
+      animContainer.appendChild(video);
+    } else {
+      animContainer.innerText = "⚠️ Không có animation cho chữ này.";
+    }
+  } catch (err) {
+    console.error(err);
+    document.getElementById("animContainer").innerText = "⚠️ Lỗi tải animation!";
+  }
+
+
 }
 
 function randomKanji() {
