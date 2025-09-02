@@ -228,6 +228,19 @@ canvas {
 }
 
 
+.meaningContainer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.speaker-icon{
+  width: 20px;
+  height: 20px;
+
+}
+
 button {
   margin: 10px 5px;
   padding: 10px 20px;

@@ -82,16 +82,40 @@ async function selectKanji(kanji) {
       video.controls = true;
       video.autoplay = true;
       animContainer.appendChild(video);
+      console.log('ok');
     } else {
       animContainer.innerText = "⚠️ Không có animation cho chữ này.";
     }
-  } catch (err) {
+
+    speakJapanese(kanji);
+
+    } catch (err) {
     console.error(err);
     document.getElementById("animContainer").innerText = "⚠️ Lỗi tải animation!";
-  }
-
+    }
+    
+ 
+    
 
 }
+
+function speakJapanese(text){
+  if ("speechSynthesis" in window) {
+    // ✅ Nếu trình duyệt hỗ trợ thì dùng Web Speech API
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "ja-JP";
+    utterance.rate = 0.9;
+    speechSynthesis.speak(utterance);
+  } else {
+    // ❌ Nếu không hỗ trợ thì fallback sang Google Translate TTS
+    const audio = new Audio(
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ja&client=tw-ob`
+    );
+    audio.play();
+  }
+}
+
+
 
 function randomKanji() {
   const cells = Array.from(document.querySelectorAll(".kanji-cell"));
@@ -235,6 +259,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
     userIcon.href = '/profile';
   }else{
     userIcon.href = '/login';
+  }
+
+  const speakerBtn = document.getElementById("speaker");
+  if (speakerBtn) {
+    speakerBtn.addEventListener("click", () => {
+      if (currentKanji) {
+        speakJapanese(currentKanji);
+      } else {
+        alert("⚠️ Chưa chọn chữ Kanji nào.");
+      }
+    });
   }
 
 });
