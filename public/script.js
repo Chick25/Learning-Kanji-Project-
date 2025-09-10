@@ -68,13 +68,35 @@ async function selectKanji(kanji) {
       'x-rapidapi-host': 'kanjialive-api.p.rapidapi.com'
     }
   };
-
+  
   try {
     const response = await fetch(url, options);
     const data = await response.json();
 
+    const apiToken = "a4aac65a-ed94-487b-9241-8e78c25b0355";
+
+
     const animContainer = document.getElementById("animContainer");
     animContainer.innerHTML = "";
+
+    const animCharacter = document.getElementById("animCharacter");
+    animCharacter.innerHTML= "";
+
+    if(data.radical && data.radical.animation && data.radical.animation.length > 0){
+      const titleRadical = document.createElement("div");
+        titleRadical.textContent = `🌱 Radical (${data.radical.character})`;
+        animCharacter.appendChild(titleRadical);
+
+        data.radical.animation.forEach(url=>{
+          const img = document.createElement('img');
+          img.src = url;
+          img.style.maxWidth = "100px";
+          img.style.margin = "5px";
+          animCharacter.appendChild(img);
+        });
+
+    }
+    
 
     if (data.kanji.video && data.kanji.video.mp4) {
       const video = document.createElement("video");
@@ -82,7 +104,7 @@ async function selectKanji(kanji) {
       video.controls = true;
       video.autoplay = true;
       animContainer.appendChild(video);
-      console.log('ok');
+      
     } else {
       animContainer.innerText = "⚠️ Không có animation cho chữ này.";
     }
@@ -94,7 +116,7 @@ async function selectKanji(kanji) {
     document.getElementById("animContainer").innerText = "⚠️ Lỗi tải animation!";
     }
     
- 
+    
     
 
 }

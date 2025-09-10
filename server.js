@@ -95,6 +95,8 @@ app.post('/login', async(req, res)=>{
 
 });
 
+
+
 app.get('/', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public','html','index.html'));
 })
@@ -132,7 +134,7 @@ app.post('/check-kanji', (req, res) => {
 
 app.post('/learn', async(req, res)=>{
 
-  try{
+  try{ 
     const {username, level, kanji} = req.body;
 
     if(!username || !level || !kanji){

@@ -298,3 +298,44 @@ footer p{
   color: #fdf6ec;
   margin: 0;
 }
+
+#combiCharacter{
+  display: flex;
+  flex-direction: row;
+  width: 50px;
+  height: 50px;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+#combiCharacter{
+  position: absolute;
+  top: calc(90px - 50px - 10px); /* 150px là top của animContainer */
+  left: 150px;
+  width: 230px;
+  height: 50px; /* chiều cao của newBox */
+  background: #eee;
+  border: 1px solid #aaa;
+  padding: 5px;
+}
+
+
+#animContainer + #animCharacter  {
+  position: absolute;
+  top: calc(150px + 200px + 10px); /* top của animContainer + height + khoảng cách */
+  left: 150px;
+  width: 230px;
+  text-align: center;
+  background: #eee;
+  padding: 5px;
+  border: 1px solid #aaa;
+}
+
+#animCharacter{
+  display: flex;
+  flex-direction: row;
+  width: 50px;
+  height: 50px;
+  justify-content: space-around;
+  gap: 10px;
+}
