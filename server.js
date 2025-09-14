@@ -2,7 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+
 const app = express();
+
+const cheerio = require("cheerio");
+const axios = require("axios");
+const fs = require("fs");
+
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
@@ -184,6 +190,68 @@ app.get('/learn', async(req, res)=>{
   }catch(err){
     res.status(500).json({err: 'Server is wrong'});
   }
+});
+
+
+const mnemonics = {};
+async function fetchKanjiList(kanji) {
+  try{
+    const res = await axios.get(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(kanji)}`);
+    return{
+      meanings: res.data.meanings || [],
+      on_readings: res.data.on_readings || [],
+      kun_readings: res.data.kun_readings || []
+    };
+
+  }catch (err) {
+    console.log(`❌ Kanji API lỗi: ${kanji}`);
+    return { meanings: [], on_readings: [], kun_readings: [] };
+  }
+}
+
+async function scarpeMnemonic(kanji) {
+  try{
+    const url = `https://www.rtega.be/chmn/index.php?c=${encodeURIComponent(kanji)}`;
+    const {data: html} = await axios.get(url);
+    const $ = cheerio.load(html);
+    const mnemonic = $("td").eq(3).text().trim() || "Not found mnemonic";
+    return mnemonic;
+  }catch(err){
+    console.log(`❌ Scrape CHMN lỗi: ${kanji}`);
+    return "Not found mnemonic";
+  }
+}
+
+
+app.get("/mnemonic", async(req, res)=>{
+  const kanji = req.query.kanji;
+  if(!kanji){
+    return res.status(400).json({error: 'Missing Kanji'});
+  }
+
+  try{
+    const apiData = await fetchKanjiList(kanji);
+    const mnemonic = await scarpeMnemonic(kanji);
+    // const url = `https://www.rtega.be/chmn/index.php?c=${encodeURIComponent(kanji)}`;
+    // const response = await fetch(url);
+    // const html = await response.text();
+    // const $ = cheerio.load(html);
+
+    // const mnemonic = $("td").eq(3).text().trim();
+
+    // $("td").each((i, el)=>{
+    //   console.log(i, $(el).text().trim());
+    //   const cellText = $(el).text().trim().toLocaleLowerCase();
+    //   if(cellText.includes("mnemonic")){
+    //     mnemonic = $(el).next("td").text().trim();
+    //   }
+    // });
+    res.json({kanji, mnemonic: mnemonic || 'Not found mnemonic'});
+
+  }catch(err){
+    res.status(500).json({error: "Lỗi khi lấy dữ liệu", details: err.message });
+  }
+
 });
 
 

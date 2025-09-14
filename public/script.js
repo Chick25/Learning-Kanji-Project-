@@ -73,29 +73,37 @@ async function selectKanji(kanji) {
     const response = await fetch(url, options);
     const data = await response.json();
 
-    const apiToken = "a4aac65a-ed94-487b-9241-8e78c25b0355";
-
+    
+    const combiCharacter = document.getElementById("combiCharacter");
+    combiCharacter.innerHTML = "";
+    const breakdown = await getKanjiBreakdown(kanji);
+    console.log(breakdown)
+    combiCharacter.textContent = breakdown;
+   
 
     const animContainer = document.getElementById("animContainer");
     animContainer.innerHTML = "";
 
     const animCharacter = document.getElementById("animCharacter");
     animCharacter.innerHTML= "";
+    const mnemonic = await scarpeMnemonic(kanji);
+    console.log(mnemonic)
+    animCharacter.textContent = mnemonic;
 
-    if(data.radical && data.radical.animation && data.radical.animation.length > 0){
-      const titleRadical = document.createElement("div");
-        titleRadical.textContent = `🌱 Radical (${data.radical.character})`;
-        animCharacter.appendChild(titleRadical);
+    // if(data.radical && data.radical.animation && data.radical.animation.length > 0){
+    //   const titleRadical = document.createElement("div");
+    //     titleRadical.textContent = `🌱 Radical (${data.radical.character})`;
+    //     animCharacter.appendChild(titleRadical);
 
-        data.radical.animation.forEach(url=>{
-          const img = document.createElement('img');
-          img.src = url;
-          img.style.maxWidth = "100px";
-          img.style.margin = "5px";
-          animCharacter.appendChild(img);
-        });
+    //     data.radical.animation.forEach(url=>{
+    //       const img = document.createElement('img');
+    //       img.src = url;
+    //       img.style.maxWidth = "100px";
+    //       img.style.margin = "5px";
+    //       animCharacter.appendChild(img);
+    //     });
 
-    }
+    // }
     
 
     if (data.kanji.video && data.kanji.video.mp4) {
@@ -115,12 +123,89 @@ async function selectKanji(kanji) {
     console.error(err);
     document.getElementById("animContainer").innerText = "⚠️ Lỗi tải animation!";
     }
-    
-    
-    
+}
+
+// test api
+const apiToken = "a4aac65a-ed94-487b-9241-8e78c25b0355";
+
+async function getKanjiWithComponent(kanji) {
+  const url  = `https://api.wanikani.com/v2/subjects?types=kanji&slugs=${encodeURIComponent(kanji)}`;
+  const res = await fetch(url,{
+    headers: {Authorization: `Bearer ${apiToken}`}
+  });
+  if(!res.ok){
+    throw new Error(`Wanakani HTTP ${res.status}`);
+  }
+   return res.json();
+}
+
+async function fetchSubjectsByIds(ids) {
+  const url = `https://api.wanikani.com/v2/subjects?ids=${ids.join(",")}`;
+  const res = await fetch(url, {
+    headers: {Authorization: `Bearer ${apiToken}`}
+  });
+  if(!res.ok){
+    throw new Error(`Wanikani HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+function safeGetMeaning(subject){
+  const meanings = subject?.data?.meanings;
+
+  if(!meanings || meanings.length === 0){
+    console.log(subject);
+    return "N/A";
+  }
+
+  console.log("🔎 meanings:", meanings);
+
+  const primary = meanings.find(m=>m.primary && m.meaning);
+  if(primary) return primary.meaning;
+
+  const first = meanings.find(m=>m.meaning);
+  if(first) return first.meaning;
+  console.log("⚠️ meanings không hợp lệ:", meanings);
+  return "N/A";
 
 }
 
+async function getKanjiBreakdown(kanji){
+  const kanjiData = await getKanjiWithComponent(kanji);
+  const subject = kanjiData.data[0];
+  const componentsIds = subject.data.component_subject_ids;
+
+  if(!componentsIds  || componentsIds.length === 0){
+    return `${kanji} (${safeGetMeaning(subject)})`;
+  }
+
+  const componentsRes = await fetchSubjectsByIds(componentsIds);
+
+  const components = componentsRes.data.map(
+    c=> {
+      const symbol = c.data.characters || c.slug || "?";
+      const meaning = safeGetMeaning(c);
+      return `${symbol} (${meaning})`
+    }
+  );
+
+  return `${kanji} = ${components.join("+")}`;
+
+}
+
+async function scarpeMnemonic(kanji) {
+  try{
+    const res = await fetch(`/mnemonic?kanji=${encodeURIComponent(kanji)}`);
+    const data = await res.json();
+    return data.mnemonic;
+  }catch(err){
+    console.log(`❌ Scrape CHMN lỗi: ${kanji}`);
+    return "Not found mnemonic";
+  }
+}
+
+
+//
 function speakJapanese(text){
   if ("speechSynthesis" in window) {
     // ✅ Nếu trình duyệt hỗ trợ thì dùng Web Speech API
