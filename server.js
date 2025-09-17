@@ -49,6 +49,11 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User',userSchema);
 
+//kanjivg
+// app.use("/kanji", express.static(path.join(__dirname, "kanjivg")));
+
+app.use(express.static("public"));
+
 
 // register
 

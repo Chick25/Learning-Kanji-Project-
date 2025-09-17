@@ -1,3 +1,5 @@
+// const { load } = require("cheerio");
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const kanjiGrid = document.getElementById("kanjiGrid");
@@ -51,6 +53,7 @@ async function updateKanjiInfoFromAPI(kanji) {
 }
 
 async function selectKanji(kanji) {
+ 
   currentKanji = kanji;
   drawCtx.clearRect(0, 0, 400, 400);
   drawTemplate(currentKanji);
@@ -82,7 +85,10 @@ async function selectKanji(kanji) {
    
 
     const animContainer = document.getElementById("animContainer");
-    animContainer.innerHTML = "";
+    // animContainer.innerHTML = "";
+    await loadKanji(kanji, "animContainer");
+    console.log("animContainer:", animContainer);
+
 
     const animCharacter = document.getElementById("animCharacter");
     animCharacter.innerHTML= "";
@@ -90,32 +96,20 @@ async function selectKanji(kanji) {
     console.log(mnemonic)
     animCharacter.textContent = mnemonic;
 
-    // if(data.radical && data.radical.animation && data.radical.animation.length > 0){
-    //   const titleRadical = document.createElement("div");
-    //     titleRadical.textContent = `🌱 Radical (${data.radical.character})`;
-    //     animCharacter.appendChild(titleRadical);
-
-    //     data.radical.animation.forEach(url=>{
-    //       const img = document.createElement('img');
-    //       img.src = url;
-    //       img.style.maxWidth = "100px";
-    //       img.style.margin = "5px";
-    //       animCharacter.appendChild(img);
-    //     });
-
-    // }
+    
     
 
-    if (data.kanji.video && data.kanji.video.mp4) {
-      const video = document.createElement("video");
-      video.src = data.kanji.video.mp4
-      video.controls = true;
-      video.autoplay = true;
-      animContainer.appendChild(video);
+    // if (data.kanji.video && data.kanji.video.mp4) {
+    //   animContainer.innerHTML = "";
+    //   const video = document.createElement("video");
+    //   video.src = data.kanji.video.mp4
+    //   video.controls = true;
+    //   video.autoplay = true;
+    //   animContainer.appendChild(video);
       
-    } else {
-      animContainer.innerText = "⚠️ Không có animation cho chữ này.";
-    }
+    // } else {
+    //   animContainer.innerText = "⚠️ Không có animation cho chữ này.";
+    // }
 
     speakJapanese(kanji);
 
@@ -414,26 +408,7 @@ async function loadKanjiByLevel() {
 
 const img = document.getElementById('preview');
 img.src = localStorage.getItem('profileImage')
-//   if(savedImage){
-//     img.src = savedImage;
-//   }
 
-//   img.addEventListener('click', (e)=>{
-//     // e.preventDefault();
-//     fileInput.click();
-//   });
-
-//   fileInput.addEventListener('change', (event)=>{
-//     const file = event.target.files[0];
-//     if(file){
-//       const reader = new FileReader();
-//       reader.onload =  (e) =>{
-//         img.src = e.target.result;
-//         localStorage.setItem('profileImage', e.target.result);
-//       };
-//       reader.readAsDataURL(file)
-//     }
-//   })
 
 const toggleBtn = document.getElementById("toggleSidebar");
 const sidebar = document.getElementById("sidebar");
@@ -442,6 +417,65 @@ toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("active");
 });
 
+
+//kanjivg
+function kanjiToUnicode(kanji) {
+  return kanji.codePointAt(0).toString(16).padStart(5, "0");
+}
+
+async function loadKanji(kanji, containerId = "kanji-container") {
+  const file = `kanjivg/kanji/${kanjiToUnicode(kanji)}.svg`;
+  const container = document.getElementById(containerId);
+
+  console.log("Đang load:", file);
+
+  try {
+    const response = await fetch(file);
+    if (!response.ok) throw new Error("Không tìm thấy file SVG cho chữ này.");
+
+    let svgText = await response.text();
+    svgText = svgText
+  .replace(/<!DOCTYPE[^>]*>/g, "")  // bỏ DOCTYPE
+  .replace(/\]\>/g, "")             // bỏ ký hiệu ]>
+
+    container.innerHTML = svgText; // render vào container mong muốn
+    // svgText = svgText.replace(/<text[^>]*>.*?<\/text>/g, "");
+    
+
+    const svg = container.querySelector("svg");
+    if(svg){
+      svg.setAttribute("width", "400");   // to hơn
+      svg.setAttribute("height", "400");
+      svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    }
+
+    const paths = container.querySelectorAll("path");
+
+    const colors = ["red", "blue", "green", "orange", "purple"];
+    paths.forEach((path, i) => {
+      const length = path.getTotalLength();
+      path.style.strokeDasharray = length;
+      path.style.strokeDashoffset = length;
+      path.style.stroke = colors[i % colors.length];
+      path.style.fill = "none";
+      path.style.transition = "none";
+    });
+
+    let delay = 0;
+    paths.forEach(path => {
+      setTimeout(() => {
+        path.style.transition = "stroke-dashoffset 0.8s ease";
+        path.style.strokeDashoffset = 0;
+      }, delay);
+      delay += 1000;
+    });
+  } catch (err) {
+    container.innerHTML = `<p style="color:red;">${err.message}</p>`;
+  }
+}
+
+
+//
 
 loadKanjiList();
 sendResultToServer(currentKanji, accuracy);
