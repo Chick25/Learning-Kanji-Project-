@@ -1,0 +1,107 @@
+/* ----- RESET CƠ BẢN ----- */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+
+    /* ----- HEADER & FOOTER ----- */
+    header {
+      background: #71A95A;
+      color: black;
+      padding: 15px 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    footer {
+      background: #000;
+      color: white;
+      padding: 10px 20px;
+      text-align: left;
+      margin-top: 40px;
+    }
+
+    /* ----- KHU CHỌN CẤP ĐỘ ----- */
+    .level-select {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .level-select label {
+      font-size: 1.2rem;
+      margin-right: 10px;
+    }
+    #levelSelect {
+      padding: 8px 12px;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    /* ----- KHU TRÒ CHƠI ----- */
+    main {
+      text-align: center;
+    }
+    #container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+    }
+    .column {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    .item {
+      width: 300px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f2f2f2;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .item:hover {
+      background: #e0e0e0;
+    }
+
+    /* ----- TRẠNG THÁI Ô ----- */
+    .item.selected { background: #cbcbcb; }
+    .item.correct { background: rgba(0, 255, 0, 0.5); animation: correctAnim 0.5s; }
+    .item.wrong { background: rgba(255, 0, 0, 0.5); animation: wrongAnim 0.5s; }
+    .item.matched { background: #707070; pointer-events: none; }
+
+    @keyframes correctAnim {
+      0% {transform: translateY(0);}
+      50% {transform: translateY(-10px);}
+      100% {transform: translateY(0);}
+    }
+    @keyframes wrongAnim {
+      0% {transform: translateX(0);}
+      25% {transform: translateX(-5px);}
+      50% {transform: translateX(5px);}
+      75% {transform: translateX(-5px);}
+      100% {transform: translateX(0);}
+    }
+
+    /* ----- KẾT QUẢ ----- */
+    #resultBox {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      display: none;
+      background: #fff;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }

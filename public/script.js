@@ -14,6 +14,11 @@ templateCanvas.width = 400;
 templateCanvas.height = 400;
 const templateCtx = templateCanvas.getContext("2d");
 
+//kanjisvg
+
+
+let animator = null;
+
 function renderAll() {
   ctx.clearRect(0, 0, 400, 400);
   ctx.globalAlpha = 1;
@@ -45,14 +50,72 @@ async function updateKanjiInfoFromAPI(kanji) {
     `Onyomi: ${onyomi} (${romajiOn}) | Kunyomi: ${kunyomi} (${romajiKun})`;
 }
 
-function selectKanji(kanji) {
+async function selectKanji(kanji) {
   currentKanji = kanji;
   drawCtx.clearRect(0, 0, 400, 400);
   drawTemplate(currentKanji);
   renderAll();
   document.getElementById("result").textContent = "";
   updateKanjiInfoFromAPI(currentKanji);
+
+  //test
+  // === Phần SVG Animate ===
+  const url = `https://kanjialive-api.p.rapidapi.com/api/public/kanji/${encodeURIComponent(kanji)}`;
+  const options = {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': 'e5b7cd00f4mshbeb15c8801358a3p17a185jsndb8ade253014', // 🔑 thay key thật
+      'x-rapidapi-host': 'kanjialive-api.p.rapidapi.com'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    const animContainer = document.getElementById("animContainer");
+    animContainer.innerHTML = "";
+
+    if (data.kanji.video && data.kanji.video.mp4) {
+      const video = document.createElement("video");
+      video.src = data.kanji.video.mp4
+      video.controls = true;
+      video.autoplay = true;
+      animContainer.appendChild(video);
+      console.log('ok');
+    } else {
+      animContainer.innerText = "⚠️ Không có animation cho chữ này.";
+    }
+
+    speakJapanese(kanji);
+
+    } catch (err) {
+    console.error(err);
+    document.getElementById("animContainer").innerText = "⚠️ Lỗi tải animation!";
+    }
+    
+ 
+    
+
 }
+
+function speakJapanese(text){
+  if ("speechSynthesis" in window) {
+    // ✅ Nếu trình duyệt hỗ trợ thì dùng Web Speech API
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "ja-JP";
+    utterance.rate = 0.9;
+    speechSynthesis.speak(utterance);
+  } else {
+    // ❌ Nếu không hỗ trợ thì fallback sang Google Translate TTS
+    const audio = new Audio(
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ja&client=tw-ob`
+    );
+    audio.play();
+  }
+}
+
+
 
 function randomKanji() {
   const cells = Array.from(document.querySelectorAll(".kanji-cell"));
@@ -96,7 +159,7 @@ function getMousePos(e) {
   };
 }
 
-function checkResult() {
+async function checkResult() {
   const userData = drawCtx.getImageData(0, 0, 400, 400).data;
   const templateData = templateCtx.getImageData(0, 0, 400, 400).data;
 
@@ -133,6 +196,33 @@ function checkResult() {
   }
 
   document.getElementById("result").textContent = resultText;
+
+  const username = localStorage.getItem('username');
+  const level = document.getElementById('levelSelect');
+  const kanji = currentKanji;
+
+  if(username && level && kanji){
+    try{
+      const res = await fetch('/learn', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          username: username,
+          level: level.value,
+          kanji: kanji
+        })
+      });
+
+      const data = await res.json();
+      console.log('Saved: ', data);
+
+    }catch(err){
+      console.log('Something wrong', err);
+    }
+  }
+
+  sendResultToServer(kanji, accuracy)
+
 }
 
 async function loadKanjiList() {
@@ -149,6 +239,7 @@ async function loadKanjiList() {
 }
 
 async function sendResultToServer(kanji, accuracy) {
+  if(!kanji) return;
   const imageData = canvas.toDataURL(); // lấy ảnh base64 từ canvas
   const res = await fetch('/check-kanji', {
     method: 'POST',
@@ -159,6 +250,90 @@ async function sendResultToServer(kanji, accuracy) {
   console.log(data.feedback); // phản hồi từ server
 }
 
+// local
+document.addEventListener('DOMContentLoaded', ()=>{
+  const userIcon = document.getElementById('userIcon');
+  const username = localStorage.getItem('username');
+
+  if(username){
+    userIcon.href = '/profile';
+  }else{
+    userIcon.href = '/login';
+  }
+
+  const speakerBtn = document.getElementById("speaker");
+  if (speakerBtn) {
+    speakerBtn.addEventListener("click", () => {
+      if (currentKanji) {
+        speakJapanese(currentKanji);
+      } else {
+        alert("⚠️ Chưa chọn chữ Kanji nào.");
+      }
+    });
+  }
+
+});
+
+// select level
+async function loadKanjiByLevel() {
+  const level = document.getElementById("levelSelect").value;
+  if (!level) return;
+
+  const grid = document.getElementById("kanjiGrid");
+  grid.innerHTML = "⏳ Đang tải...";
+
+  try {
+    const res = await fetch(`https://kanjiapi.dev/v1/kanji/${level}`);
+    const kanjiList = await res.json();
+
+    grid.innerHTML = "";
+    kanjiList.forEach(k => {
+      const cell = document.createElement("div");
+      cell.className = "kanji-cell";
+      cell.textContent = k;
+      cell.onclick = () => selectKanji(k);
+      grid.appendChild(cell);
+    });
+
+    if (kanjiList.length > 0) {
+      selectKanji(kanjiList[0]);
+    }
+
+  } catch (error) {
+    grid.innerHTML = "⚠️ Lỗi tải dữ liệu!";
+    console.error(error);
+  }
+}
+
+const img = document.getElementById('preview');
+img.src = localStorage.getItem('profileImage')
+//   if(savedImage){
+//     img.src = savedImage;
+//   }
+
+//   img.addEventListener('click', (e)=>{
+//     // e.preventDefault();
+//     fileInput.click();
+//   });
+
+//   fileInput.addEventListener('change', (event)=>{
+//     const file = event.target.files[0];
+//     if(file){
+//       const reader = new FileReader();
+//       reader.onload =  (e) =>{
+//         img.src = e.target.result;
+//         localStorage.setItem('profileImage', e.target.result);
+//       };
+//       reader.readAsDataURL(file)
+//     }
+//   })
+
+const toggleBtn = document.getElementById("toggleSidebar");
+const sidebar = document.getElementById("sidebar");
+
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("active");
+});
 
 
 loadKanjiList();
