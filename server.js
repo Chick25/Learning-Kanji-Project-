@@ -49,6 +49,16 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User',userSchema);
 
+// THÊM VÀO ĐÂY – SAU mongoose.connect()
+const kanjiResultSchema = new mongoose.Schema({
+  kanji: String,
+  accuracy: Number,
+  imageData: String,
+  timestamp: { type: Date, default: Date.now }
+});
+
+const KanjiResult = mongoose.model('KanjiResult', kanjiResultSchema);
+
 //kanjivg
 // app.use("/kanji", express.static(path.join(__dirname, "kanjivg")));
 
@@ -129,19 +139,71 @@ app.get('/game2', (req, res)=>{
 });
 
 // API nhận dữ liệu vẽ từ frontend
-app.post('/check-kanji', (req, res) => {
-  const { kanji, accuracy, imageData } = req.body;
+// app.post('/check-kanji', (req, res) => {
+//   const { kanji, accuracy, imageData } = req.body;
 
-  console.log("Nhận dữ liệu từ client:", { kanji, accuracy });
+//   console.log("Nhận dữ liệu từ client:", { kanji, accuracy });
   
-  // Ví dụ: chấm điểm đơn giản
-  let feedback = accuracy > 50 ? "Tốt lắm!" : "Cần luyện thêm";
+//   // Ví dụ: chấm điểm đơn giản
+//   let feedback = accuracy > 50 ? "Tốt lắm!" : "Cần luyện thêm";
   
-  res.json({
-    message: "Đã nhận dữ liệu thành công",
-    feedback: feedback
-  });
+//   res.json({
+//     message: "Đã nhận dữ liệu thành công",
+//     feedback: feedback
+//   });
+// });
+
+app.post('/check-kanji', async (req, res) => {
+  try {
+    const { kanji } = req.body;
+
+    // Lấy username từ session hoặc localStorage (frontend gửi kèm)
+    const username = req.body.username || req.headers['x-username'];
+    if (!username) {
+      return res.status(400).json({ error: "Thiếu username" });
+    }
+
+    // Tìm user và thêm chữ vào progress (theo cấp độ hiện tại)
+    const level = req.body.level || "grade-1"; // bạn có thể gửi level từ frontend
+
+    const updatedUser = await User.findOneAndUpdate(
+      { username },
+      { $addToSet: { [`progress.${level}`]: kanji } }, // tránh trùng
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "Không tìm thấy user" });
+    }
+
+    console.log(`Đã thêm ${kanji} vào progress của ${username} (${level})`);
+
+    res.json({ 
+      success: true, 
+      message: "Đã lưu vào tiến độ học!",
+      progress: updatedUser.progress 
+    });
+
+  } catch (err) {
+    console.error("Lỗi lưu progress:", err);
+    res.status(500).json({ error: "Lỗi server" });
+  }
 });
+// app.post('/check-kanji', async (req, res) => {
+//   try {
+//     console.log("Nhận dữ liệu từ client:", req.body);
+
+//     const newResult = new KanjiResult(req.body);  // KanjiResult là model của bạn
+//     await newResult.save();                       // ← DÒNG QUAN TRỌNG NHẤT
+
+//     console.log("Đã lưu thành công vào MongoDB:", newResult); // thêm dòng này để xác nhận
+
+//     res.json({ success: true, message: "Lưu thành công" });
+//   } catch (err) {
+//     console.error("Lỗi lưu MongoDB:", err);
+//     res.status(500).json({ success: false, error: err.message });
+//   }
+// });
 
 app.post('/learn', async(req, res)=>{
 
