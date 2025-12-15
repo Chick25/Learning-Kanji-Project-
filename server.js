@@ -114,6 +114,11 @@ app.post('/login', async(req, res)=>{
   const token = jwt.sign({username: user.username}, 'SECRET_KEY', {expiresIn: '1h'});
   res.json({message:'Login successful', token});
 
+  res.json({
+    message: 'Login successful',
+    username: user.username  // TRẢ VỀ USERNAME
+  });
+
 });
 
 
@@ -136,6 +141,14 @@ app.get('/profile', (req, res)=>{
 
 app.get('/game2', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'game2.html'));
+});
+
+app.get('/write_game', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'write_game.html'));
+});
+
+app.get('/botgame', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'botgame.html'));
 });
 
 // API nhận dữ liệu vẽ từ frontend
@@ -189,6 +202,7 @@ app.post('/check-kanji', async (req, res) => {
     res.status(500).json({ error: "Lỗi server" });
   }
 });
+
 // app.post('/check-kanji', async (req, res) => {
 //   try {
 //     console.log("Nhận dữ liệu từ client:", req.body);
@@ -259,6 +273,38 @@ app.get('/learn', async(req, res)=>{
   }
 });
 
+
+// API lấy tiến độ học (gộp tất cả grade cho game)
+app.get('/api/progress', async (req, res) => {
+  try {
+    const { username } = req.query;
+    if (!username) {
+      return res.status(400). json({ error: 'Thiếu username' });
+    }
+
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: 'Không tìm thấy user' });
+    }
+
+    // Gộp tất cả chữ từ progress (grade-1, grade-2, ...)
+    const allLearnedKanji = [];
+    Object.values(user.progress || {}).forEach(gradeArray => {
+      allLearnedKanji.push(...(gradeArray || []));
+    });
+
+    res.json({
+      success: true,
+      learnedKanji: allLearnedKanji,  // Mảng chữ đã học
+      total: allLearnedKanji.length,
+      progress: user.progress  // Toàn bộ object progress nếu cần
+    });
+
+  } catch (err) {
+    console.error('Lỗi lấy progress:', err);
+    res.status(500).json({ error: 'Lỗi server' });
+  }
+});
 
 const mnemonics = {};
 async function fetchKanjiList(kanji) {

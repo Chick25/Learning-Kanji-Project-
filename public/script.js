@@ -1,4 +1,3 @@
-// const { load } = require("cheerio");
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -6,7 +5,6 @@ const kanjiGrid = document.getElementById("kanjiGrid");
 
 let currentKanji = null;
 let localStrokes = [];
-
 let userStrokes = [];
 let currentStrokes = 0;
 let currentStrokePoints = [];
@@ -15,23 +13,12 @@ const drawCanvas = document.createElement("canvas");
 drawCanvas.width = 400;
 drawCanvas.height = 400;
 const drawCtx = drawCanvas.getContext("2d");
-
 const templateCanvas = document.createElement("canvas");
 templateCanvas.width = 400;
 templateCanvas.height = 400;
 const templateCtx = templateCanvas.getContext("2d");
 
-//kanjisvg
-
-
 let animator = null;
-
-// function renderAll() {
-//   ctx.clearRect(0, 0, 400, 400);
-//   ctx.globalAlpha = 1;
-//   ctx.drawImage(templateCanvas, 0, 0);
-//   ctx.drawImage(drawCanvas, 0, 0);
-// }
 
 function renderAll() {
   ctx.clearRect(0, 0, 400, 400);
@@ -54,17 +41,6 @@ function renderAll() {
   }
 }
 
-// function drawTemplate(kanji) {
-//   templateCtx.clearRect(0, 0, 400, 400);
-//   templateCtx.globalAlpha = 0.08;
-//   templateCtx.fillStyle = "#000";
-//   templateCtx.font = "200px 'Yu Mincho', 'MS Mincho', serif";
-//   templateCtx.textAlign = "center";
-//   templateCtx.textBaseline = "middle";
-//   templateCtx.fillText(kanji, 200, 200);
-
-// }
-
 //test
 function drawStrokeNumbers() {  // ← Bỏ tham số kanji
   templateCtx.clearRect(0, 0, 400, 400);
@@ -86,41 +62,6 @@ function drawStrokeNumbers() {  // ← Bỏ tham số kanji
   templateCtx.restore();
   renderAll();
 }
-// async function drawStrokeNumbers(kanji){
-//   templateCtx.clearRect(0, 0, 400, 400);
-
-//   // const animContainer = document.getElementById("animContainer");
-   
-//   strokes = await loadKanji(kanji, "animContainer");
-
-//   templateCtx.save();
-//   templateCtx.translate(90, 90); // Dịch chuyển toàn bộ nét vẽ
-//   templateCtx.scale(2, 2); // Phóng to nét vẽ
-//   // const tempCanvas = document.createElement("canvas");
-//   // tempCanvas.width = 400;
-//   // tempCanvas.height = 400;
-//   // const tempCtx = tempCanvas.getContext("2d");
-
-//   strokes.forEach((d, i)=>{
-//     const path = new Path2D(d);
-   
-//     templateCtx.lineWidth = 4;
-    
-//     if( i < currentStrokes){
-//       templateCtx.strokeStyle = "lightgray";
-    
-//     }else{
-//       templateCtx.strokeStyle = "lightgray";
-//       templateCtx.globalAlpha = 0.5;
-//     }
-
-//     templateCtx.stroke(path);
-//     templateCtx.globalAlpha = 1;
-//   });
-//   // templateCtx.drawImage(tempCanvas, 0, 0);
-//   templateCtx.restore();
-//   renderAll();
-// }
 
 async function updateKanjiInfoFromAPI(kanji) {
   const res = await fetch(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(kanji)}`);
@@ -152,8 +93,6 @@ async function selectKanji(kanji) {
   document.getElementById("result").textContent = "";
   updateKanjiInfoFromAPI(currentKanji);
   await updateKanjiInfoFromAPI(currentKanji);
-
-  
 
   //test
   // === Phần SVG Animate ===
@@ -332,19 +271,6 @@ canvas.addEventListener("mousedown", (e)=>{
   drawCtx.moveTo(x, y);
 });
 
-// canvas.addEventListener("mousemove", (e)=>{
-//   if(!isDrawing) return;
-
-//   const {x, y} = getMousePos(e);
-//   currentStrokePoints.push({x, y});
-//   drawCtx.lineTo(x, y);
-//   drawCtx.strokeStyle = "#2c3e50";
-//   drawCtx.lineWidth = 4;
-//   drawCtx.lineCap = "round";
-//   drawCtx.stroke();
-//   renderAll();
-// });
-
 canvas.addEventListener("mousemove", (e) => {
   if (!isDrawing) return;
   const {x, y} = getMousePos(e);
@@ -458,7 +384,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       }
     });
   }
-
 });
 
 // select level
@@ -502,8 +427,6 @@ const sidebar = document.getElementById("sidebar");
 toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("active");
 });
-
-
 //kanjivg
 function kanjiToUnicode(kanji) {
   return kanji.codePointAt(0).toString(16).padStart(5, "0");
@@ -575,11 +498,6 @@ async function checkResult() {
     document.getElementById('result').innerText = "⚠️ Chưa tải chữ Kanji";
     return;
   }
-
-  // if (currentStrokes >= localStrokes.length) {
-  //   document.getElementById("result").innerText = `🎉 Hoàn thành chữ ${currentKanji}!`;
-  //   return;
-  // }
 
    if (currentStrokes >= localStrokes.length) {
     // ĐÃ HOÀN THÀNH TOÀN BỘ CHỮ
@@ -653,24 +571,8 @@ async function checkResult() {
   const ratio = matchCount / currentPoints.length;
   const threshold = 0.35;  // điều chỉnh tùy độ khó (0.3 dễ, 0.5 khó)
 
-  // if (ratio >= threshold) {
-  //   currentStrokes++;
-  //   if (currentStrokes >= localStrokes.length) {
-  //     document.getElementById("result").innerText = `🎉 Hoàn thành chữ ${currentKanji}!`;
-  //   } else {
-  //     document.getElementById("result").innerText = 
-  //       `✔️ Đúng nét ${currentStrokes}! Tiếp tục nét ${currentStrokes + 1}`;
-  //   }
-  // } else {
-  //   document.getElementById("result").innerText = 
-  //     `❌ Nét ${currentStrokes + 1} chưa đúng (chỉ khớp ${Math.round(ratio*100)}%), vẽ lại nhé!`;
-  // }
-
   if (ratio >= threshold) {
     currentStrokes++;
-
-    // Gửi dữ liệu từng nét đúng (nếu muốn theo dõi chi tiết)
-    // await sendResultToServer(currentKanji, Math.round(ratio * 100), currentStrokes);
 
     if (currentStrokes >= localStrokes.length) {
       // Trường hợp vừa hoàn thành nét cuối → hiện thông báo + gửi dữ liệu

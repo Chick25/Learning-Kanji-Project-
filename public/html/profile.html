@@ -180,6 +180,53 @@
     #fileInput{
       display: none;
     }
+    /* NÚT REVIEW - ĐẸP, CHÍNH GIỮA, HIỆN ĐẠI */
+/* Wrapper để căn giữa nút Review */
+/* Đảm bảo nút Review nằm chính giữa bên trong container */
+.review-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 55px !important;
+  padding: 10px 0;
+  top:55px;
+}
+
+/* Nút Review - Đẹp, hiện đại, nổi bật */
+.review-btn {
+  padding: 16px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #71A95A, #9ccc65);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(113, 169, 90, 0.35);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  min-width: 240px;
+}
+
+.review-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(113, 169, 90, 0.45);
+  background: linear-gradient(135deg, #5d8c4a, #7aa556);
+}
+
+.review-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 575.98px) {
+  .review-btn {
+    font-size: 16px;
+    padding: 14px 32px;
+    min-width: 100px;
+  }
+}
     /* Responsive */
     @media (max-width: 575.98px) {
 
@@ -241,12 +288,25 @@
         </div>
         <p class="progress-text" id="progressText">Tiến độ: </p>
       </div>
+      
+      <div id="kanjiDisplay" class="kanji-display">
+        <h2 id="levelTitle" style="text-align: center; margin-bottom: 30px; color: #71A95A;"></h2>
+        <div id="kanjiContainer" class="kanji-grid"></div>
+        <div id="noKanjiMsg" class="no-kanji" style="display:none;">
+          Bạn chưa học chữ nào ở cấp độ này.<br>
+        </div>
+      </div>
+
     </div>
+
+     
+ 
   </main>
 
 
   <span id="returnBtn" class="returnBtn">&#8594;</span>
 
+  
 
   <!-- ✅ Nút Logout cố định -->
   <div class="logout-wrap">
