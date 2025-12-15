@@ -4,26 +4,77 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Learning Kanji</title>
-        <link rel="stylesheet" href="/tsk/noi_chu/stylegame2.css">
-        <link rel="stylesheet" href="../../styles.css">
+        <link rel="stylesheet" href="stylegame2.css">
     </head>
     <body>
-        <header>
-            <p>Learning Kanji</p>
-        </header>
-        <div class="main-content">
-            <div id="hud">Đang tải dữ liệu...</div>
-            <div id="question"></div>
-            <div id="game-board"></div>
-            <div class="options" id="options"></div>
-        </div>
 
-        <button id="btn" class="hidden">Reset</button>
+    <header>
+        <p>Learning Kanji</p>
+    </header>
+    <div class="underheader">
+    <h1>Game nối Kanji với nghĩa</h1>
+    <div class="user_icon">
+      <a href="#" id="userIcon">
+        <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user_img" id="preview"/>
+      </a>
+    </div>
+    </div>
+
+    <div id="page-content">
+
+        <div id="app-layout">
+
+            <div class="left" id="sidebar">
+                <button id="toggleSidebar" class="toggle-btn">📂</button>
+
+                <div class="menu-content">
+                    <h3>Menu</h3>
+                    <ul>
+                    <li><a href="">Kanji Matching</a></li>
+                    <li><a href="#">Kanji Writing</a></li>
+                    <li><a href="#">Kanji Game With Bot</a></li>
+                    <li><a href="../../html/index.html">All Kanji Writing</a></li>
+                    <li><a href="#">All Kanji Matching</a></li>
+                    </ul>
+                </div>
+                </div>
+
+            <main id="main-content">
+
+                <div id="controls">
+                    <select id="grade-select">
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                    </select>
+                </div>
+
+                <div id="hud"></div>
+
+                <!-- GAME BOARD -->
+                <div class="container" id="game-board"></div>
+
+                <button id="btn">Bắt đầu lại</button>
+
+            </main>
+
+            <aside id="right-history">
+                <h4>Lịch sử</h4>
+                <ul id="history-list"></ul>
+            </aside>
+
+        </div>
 
         <div id="popup"></div>
 
-        <footer>CTTNHH 2 THÀNH VIÊN</footer>
-        <script src="tsk/noi_chu/scriptgame2.js"></script>
+    </div>
+
+    <footer>
+        <p>CTTNHH 2 thành viên</p>
+    </footer>
+        <script src="scriptgame2.js"></script>
         <script src="../../../js/auth.js"></script>
     </body>
 </html>
