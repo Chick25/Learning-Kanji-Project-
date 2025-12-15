@@ -62,9 +62,9 @@ const KanjiResult = mongoose.model('KanjiResult', kanjiResultSchema);
 //kanjivg
 // app.use("/kanji", express.static(path.join(__dirname, "kanjivg")));
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 // register
 
 app.post('/register', async(req, res)=>{
@@ -121,7 +121,7 @@ app.post('/login', async(req, res)=>{
 
 });
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public','html','index.html'));
@@ -139,32 +139,17 @@ app.get('/profile', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public/html/profile.html'));
 });
 
-app.get('/game2', (req, res)=>{
-  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'game2.html'));
+app.get('/word_connect_game', (req, res)=>{
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'word_connect_game.html'));
 });
 
 app.get('/write_game', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'write_game.html'));
 });
 
-app.get('/botgame', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'botgame.html'));
+app.get('/botgame_kanjiLearned', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'botgame_kanjiLearned.html'));
 });
-
-// API nhận dữ liệu vẽ từ frontend
-// app.post('/check-kanji', (req, res) => {
-//   const { kanji, accuracy, imageData } = req.body;
-
-//   console.log("Nhận dữ liệu từ client:", { kanji, accuracy });
-  
-//   // Ví dụ: chấm điểm đơn giản
-//   let feedback = accuracy > 50 ? "Tốt lắm!" : "Cần luyện thêm";
-  
-//   res.json({
-//     message: "Đã nhận dữ liệu thành công",
-//     feedback: feedback
-//   });
-// });
 
 app.post('/check-kanji', async (req, res) => {
   try {
@@ -203,21 +188,6 @@ app.post('/check-kanji', async (req, res) => {
   }
 });
 
-// app.post('/check-kanji', async (req, res) => {
-//   try {
-//     console.log("Nhận dữ liệu từ client:", req.body);
-
-//     const newResult = new KanjiResult(req.body);  // KanjiResult là model của bạn
-//     await newResult.save();                       // ← DÒNG QUAN TRỌNG NHẤT
-
-//     console.log("Đã lưu thành công vào MongoDB:", newResult); // thêm dòng này để xác nhận
-
-//     res.json({ success: true, message: "Lưu thành công" });
-//   } catch (err) {
-//     console.error("Lỗi lưu MongoDB:", err);
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// });
 
 app.post('/learn', async(req, res)=>{
 

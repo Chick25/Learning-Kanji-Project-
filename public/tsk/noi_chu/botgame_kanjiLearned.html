@@ -445,72 +445,7 @@
     }
 
     function checkWrite() {
-      
-      // (giữ nguyên code kiểm tra viết của bạn)
-    // if (currentStroke >= strokes.length) {
-    // resultDiv.innerHTML = `<span class="correct">HOÀN THÀNH CHỮ "${currentKanji}"!</span>`;
-    // score += 10;
-    // scoreSpan.textContent = score;
-    // setTimeout(nextQuestion, 2000);
-    // return;
-    // }
-
-    // const pathStr = strokes[currentStroke];
-    // const points = userStrokes[currentStroke] || [];
-
-    // if (points.length < 10) {
-    // resultDiv.innerHTML = `<span class="wrong">Nét quá ngắn!</span>`;
-    // return;
-    // }
-
-    // const getEndpoints = d => {
-    // const tokens = d.replace(/,/g,' ').replace(/\s+/g,' ').trim().split(/\s+/);
-    // let x = 0, y = 0, sx = 0, sy = 0, moved = false, cmd = '';
-    // for (let t of tokens) {
-    //     if (/[a-zA-Z]/.test(t)) { cmd = t; continue; }
-    //     const nums = tokens.slice(tokens.indexOf(t)).map(parseFloat).filter(n=>!isNaN(n));
-    //     if (!moved && cmd.toUpperCase() === 'M') { sx = x = nums[0]; sy = y = nums[1]||y; moved = true; }
-    //     if (cmd === 'c' || cmd === 'C') {
-    //     const dx = cmd === 'c' ? nums[nums.length-2] : 0;
-    //     const dy = cmd === 'c' ? nums[nums.length-1] : 0;
-    //     x = cmd === 'C' ? nums[nums.length-2] : x + dx;
-    //     y = cmd === 'C' ? nums[nums.length-1] : y + dy;
-    //     }
-    // }
-    // return {start: {x:sx,y:sy}, end: {x,y}};
-    // };
-
-    // const model = getEndpoints(pathStr);
-    // const userVec = { dx: points[points.length-1].x - points[0].x, dy: points[points.length-1].y - points[0].y };
-    // const modelVec = { dx: model.end.x - model.start.x, dy: model.end.y - model.start.y };
-    // const dot = (modelVec.dx * userVec.dx + modelVec.dy * userVec.dy) /
-    //             (Math.hypot(modelVec.dx, modelVec.dy) * Math.hypot(userVec.dx, userVec.dy));
-
-    // if (dot < -0.3) {
-    // resultDiv.innerHTML = `<span class="wrong">Sai hướng nét ${currentStroke + 1}!</span>`;
-    // return;
-    // }
-
-    // const tempCtx = document.createElement("canvas").getContext("2d");
-    // tempCtx.lineWidth = 22;
-    // let match = 0;
-    // for (let p of points) {
-    // const x = (p.x - 90) / 2;
-    // const y = (p.y - 90) / 2;
-    // if (tempCtx.isPointInStroke(new Path2D(pathStr), x, y)) match++;
-    // }
-    // const ratio = match / points.length;
-
-    // if (ratio >= 0.35) {
-    // resultDiv.innerHTML = `<span class="correct">Đúng nét ${currentStroke + 1}!</span>`;
-    // currentStroke++;
-    // render();
-    // setTimeout(() => resultDiv.innerHTML = "", 1000);
-    // } else {
-    // resultDiv.innerHTML = `<span class="wrong">Chưa đúng nét ${currentStroke + 1} (${(ratio*100).toFixed(0)}%)</span>`;
-    // }
-
-      if (currentStroke >= strokes.length) {
+    if (currentStroke >= strokes.length) {
     resultDiv.innerHTML = `<span class="correct">HOÀN THÀNH CHỮ "${currentKanji}"!</span>`;
     score += 10;
     scoreSpan.textContent = score;
