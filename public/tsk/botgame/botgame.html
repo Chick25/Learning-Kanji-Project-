@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Kanji Bot Duel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- ĐÚNG: KHÔNG CÓ /public -->
+  <link rel="stylesheet" href="/tsk/botgame/stylegame_kanjiLearned.css">
+</head>
+<body>
+
+  <header>Kanji Bot Duel</header>
+
+  <div class="container">
+    <!-- CHỌN LEVEL -->
+    <div id="levelSelection">
+      <h1 class="title">Chọn cấp độ</h1>
+      <div class="selection">
+        <div class="card" onclick="selectLevel('grade-1')">
+          <div class="card-icon">1️⃣</div>
+          <div class="card-title">Cấp 1</div>
+          <div class="card-desc">80 chữ cơ bản</div>
+          <button class="play-btn">Chọn</button>
+        </div>
+        <div class="card" onclick="selectLevel('grade-2')">
+          <div class="card-icon">2️⃣</div>
+          <div class="card-title">Cấp 2</div>
+          <div class="card-desc">160 chữ</div>
+          <button class="play-btn">Chọn</button>
+        </div>
+        <div class="card" onclick="selectLevel('grade-3')">
+          <div class="card-icon">3️⃣</div>
+          <div class="card-title">Cấp 3</div>
+          <div class="card-desc">200 chữ</div>
+          <button class="play-btn">Chọn</button>
+        </div>
+        <div class="card" onclick="selectLevel('grade-4')">
+          <div class="card-icon">4️⃣</div>
+          <div class="card-title">Cấp 4</div>
+          <div class="card-desc">200 chữ</div>
+          <button class="play-btn">Chọn</button>
+        </div>
+        <div class="card" onclick="selectLevel('grade-5')">
+          <div class="card-icon">5️⃣</div>
+          <div class="card-title">Cấp 5</div>
+          <div class="card-desc">185 chữ cao cấp</div>
+          <button class="play-btn">Chọn</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHỌN CHẾ ĐỘ -->
+    <div id="modeSelection" class="hidden">
+      <h1 class="title">Chọn chế độ chơi</h1>
+      <div class="selection">
+        <div class="card" onclick="startGame('match')">
+          <div class="card-icon">🔗</div>
+          <div class="card-title">Nối Nghĩa</div>
+          <div class="card-desc">Bot đưa nghĩa → bạn chọn Kanji đúng</div>
+          <button class="play-btn">Chơi</button>
+        </div>
+        <div class="card" onclick="startGame('write')">
+          <div class="card-icon">✍️</div>
+          <div class="card-title">Viết Chữ</div>
+          <div class="card-desc">Bot đưa nghĩa → bạn viết Kanji</div>
+          <button class="play-btn">Chơi</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME PLAY -->
+    <div class="game-area hidden" id="gameArea">
+      <div id="timer">Thời gian: <span id="timeLeft">60</span>s</div>
+      <div id="scores">
+        <div id="playerScore">Bạn: <span id="playerPoint">0.0</span></div>
+        <div id="botScore">Bot: <span id="botPoint">0.0</span></div>
+      </div>
+      <div id="question"></div>
+
+      <div class="options" id="options"></div>
+
+      <canvas id="canvas" width="400" height="400" class="hidden"></canvas>
+
+      <div class="btn-group hidden">
+        <button id="checkBtn">Check</button>
+        <button id="clearBtn">Clear</button>
+        <button id="undoBtn">Undo nét</button>
+        <button id="skipBtn">Skip (-0.5 điểm)</button>
+      </div>
+
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <footer>© CTTNHH 2 thành viên</footer>
+
+  <!-- JS ĐÚNG – KHÔNG CÓ /public -->
+  <script src="/tsk/botgame/scriptgame_kanjiLearned.js"></script>
+</body>
+</html>

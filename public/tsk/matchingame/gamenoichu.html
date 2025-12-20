@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanji Writing Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- SỬA: XÓA /public -->
+  <link rel="stylesheet" href="/tsk/matchingame/style_matchinggame.css">
+</head>
+<body>
+
+  <header>Learning Kanji</header>
+
+  <div class="underheader">
+    <h1>Kanji Writing Game</h1>
+    <div class="user_icon">
+      <a href="/profile" id="userIcon">
+        <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user" id="preview"/>
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="center">
+      <div id="meaningBox">Đang tải dữ liệu...</div>
+      <canvas id="canvas" width="400" height="400"></canvas>
+      <div id="result"></div>
+
+      <div class="btn-group">
+        <button id="checkBtn">Check Answer</button>
+        <button id="clearBtn">Clear All</button>
+        <button id="undoBtn">Undo nét cuối</button>
+        <button id="nextBtn">Tiếp theo</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>© CTTNHH 2 thành viên</footer>
+
+  <!-- SỬA: XÓA /public -->
+  <script src="/tsk/matchingame/script_matchinggame.js"></script>
+</body>
+</html>

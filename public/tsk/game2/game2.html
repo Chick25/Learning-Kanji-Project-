@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Nối Kanji Với Nghĩa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- CHỈ 1 FILE CSS DUY NHẤT -->
+  <link rel="stylesheet" href="/tsk/game2/game2.css">
+</head>
+<body>
+
+    <header>
+        <p>Learning Kanji</p>
+        <div class="header-right">
+            <div class="streak-box">
+            🔥 Chuỗi học: <b id="streakCount">0</b> ngày
+            </div>
+        </div>
+    </header>
+
+    <div class="underheader">
+        <h1>Game Nối Kanji Với Nghĩa</h1>
+        <div class="user_icon">
+        <a href="/profile" id="userIcon">
+            <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user" id="preview"/>
+        </a>
+        </div>
+    </div>
+
+    <div id="page-content">
+        <div id="app-layout">
+
+        <!-- SIDEBAR TRÁI -->
+        <div class="left" id="sidebar">
+            <button id="toggleSidebar" class="toggle-btn">☰</button>
+
+            <div class="menu-content">
+            <h3>Menu</h3>
+            <ul>
+                <li><a href="/word_connect_game">Kanji Matching</a></li>
+                <li><a href="/write_game">Kanji Writing</a></li>
+                <li><a href="/botgame_kanjiLearned">Game With Bot</a></li>
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/profile">Hồ sơ cá nhân</a></li>
+            </ul>
+            </div>
+        </div>
+
+        <!-- NỘI DUNG CHÍNH -->
+        <main id="main-content">
+            <div id="controls">
+            <select id="grade-select">
+                <option value="1">Grade 1</option>
+                <option value="2">Grade 2</option>
+                <option value="3">Grade 3</option>
+                <option value="4">Grade 4</option>
+                <option value="5">Grade 5</option>
+            </select>
+            </div>
+
+            <div id="hud">Chọn cấp độ để bắt đầu</div>
+
+            <!-- GRID NỐI KANJI -->
+            <div class="container" id="game-board"></div>
+
+            <button id="btn">Bắt đầu lại</button>
+        </main>
+
+        <!-- LỊCH SỬ BÊN PHẢI -->
+        <aside id="right-history">
+            <h4>Lịch sử chơi</h4>
+            <ul id="history-list"></ul>
+        </aside>
+
+        </div>
+
+        <!-- POPUP KẾT QUẢ -->
+        <div id="popup"></div>
+    </div>
+
+    <footer>
+        <p>© CTTNHH 2 thành viên</p>
+    </footer>
+
+  <!-- CHỈ 1 FILE JS DUY NHẤT -->
+  <script src="/tsk/game2/game2.js"></script>
+</body>
+</html>

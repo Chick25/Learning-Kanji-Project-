@@ -1,97 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Kanji Writing Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f0f7f4, #d9f0e6); min-height: 100vh; margin: 0; }
-    header { background: #71A95A; color: white; text-align: center; padding: 20px; font-size: 28px; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .underheader { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .underheader h1 { font-size: 28px; color: #333; margin: 0; }
-    .user_icon img { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #71A95A; }
-    .container { padding: 30px; display: flex; justify-content: center; }
-    .center { text-align: center; max-width: 500px; width: 100%; }
-    #meaningBox {
-      font-size: 36px;
-      font-weight: 700;
-      color: #71A95A;
-      margin: 30px 0;
-      text-transform: capitalize;
-    }
-    canvas {
-      border: 4px solid #ddd;
-      border-radius: 16px;
-      background: white;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      touch-action: none; /* cho mobile */
-    }
-    #result {
-      font-size: 24px;
-      font-weight: 600;
-      margin: 25px 0;
-      min-height: 50px;
-      padding: 15px;
-      border-radius: 12px;
-      background: #f8f9fa;
-    }
-    .correct { color: #28a745; background: #d4edda; }
-    .wrong { color: #dc3545; background: #f8d7da; }
-    .btn-group {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 20px 0;
-    }
-    button {
-      padding: 14px 32px;
-      font-size: 18px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s;
-      min-width: 140px;
-    }
-    button:nth-child(1) { background: #71A95A; color: white; }
-    button:nth-child(2) { background: #ff6b6b; color: white; }
-    button:nth-child(3) { background: #ffa500; color: white; }
-    button:hover { opacity: 0.9; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-    footer { text-align: center; padding: 20px; background: #333; color: #fff; margin-top: auto; }
-  </style>
-</head>
-<body>
-
-  <header>Learning Kanji</header>
-  <div class="underheader">
-    <h1>Kanji Writing Game</h1>
-    <div class="user_icon">
-      <a href="#" id="userIcon">
-        <img src="https://cdn-icons-png.flaticon.com/128/456/456212.png" alt="user" id="preview"/>
-      </a>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="center">
-      <div id="meaningBox">Đang tải...</div>
-      <canvas id="canvas" width="400" height="400"></canvas>
-
-      <div class="btn-group">
-        <button onclick="checkResult()">Check Answer</button>
-        <button onclick="clearCanvas()">Clear All</button>
-        <button onclick="undoLastStroke()">Undo nét cuối</button>
-      </div>
-      <div id="result"></div>
-    </div>
-  </div>
-
-  <footer><p>© CTTNHH 2 thành viên</p></footer>
-
-  <script>
+document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     const meaningBox = document.getElementById("meaningBox");
@@ -249,12 +156,12 @@
       return { start: { x: startX, y: startY }, end: { x: currentX, y: currentY } };
     }
 
-    async function checkResult() {
-  if (currentStroke >= strokes.length) {
-    resultDiv.innerHTML = `<span class="correct">HOÀN THÀNH "${currentKanji}"! 🎉</span>`;
-    setTimeout(nextQuestion, 2000);
-    resetHints();
-    return;
+  async function checkResult() {
+    if (currentStroke >= strokes.length) {
+      resultDiv.innerHTML = `<span class="correct">HOÀN THÀNH "${currentKanji}"! 🎉</span>`;
+      setTimeout(nextQuestion, 2000);
+      resetHints();
+      return;
   }
 
   const pathStr = strokes[currentStroke];
@@ -398,13 +305,18 @@
     function undoLastStroke() {
       if (userStrokes.length > 0) {
         userStrokes.pop();
-        if (currentStroke > 0) currentStroke--;
+        if (currentStroke > 0) currentStroke--; // ← Sửa: currentStroke (biến bạn đang dùng)
         render();
         resultDiv.innerHTML = `<span style="color:#ffa500">Đã xóa nét cuối. Vẽ lại nét ${currentStroke + 1}!</span>`;
         setTimeout(() => resultDiv.innerHTML = "", 2000);
         resetHints();
+        console.log('removed'); // BÂY GIỜ SẼ XUẤT HIỆN!
+      } else {
+        console.log('nothing to undo');
+        resultDiv.innerHTML = `<span style="color:#999">Không có nét nào để xóa!</span>`;
+        setTimeout(() => resultDiv.innerHTML = "", 1500);
       }
-    }
+    } 
 
     async function nextQuestion() {
       if (learnedKanji.length === 0) return;
@@ -470,8 +382,9 @@
     });
 
     loadLearnedKanji();
-  </script>
-  <script src="../script.js"></script>
-  <script src="/js/auth.js"></script>
-</body>
-</html>
+
+    document.getElementById("checkBtn").onclick = checkResult;
+    document.getElementById("clearBtn").onclick = clearCanvas;
+    document.getElementById("undoBtn").onclick = undoLastStroke;
+    document.getElementById("skipBtn").onclick = nextQuestion;
+});

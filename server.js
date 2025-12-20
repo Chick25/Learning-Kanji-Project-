@@ -17,11 +17,13 @@ const { register } = require('module');
 const { error } = require('console');
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' })); // Cho phép gửi ảnh Base64
 app.use(bodyParser.urlencoded({extended: true}));
 
-
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // =======  KẾT NỐI MONGODB =======
 mongoose.connect(
@@ -57,6 +59,8 @@ const kanjiResultSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now }
 });
 
+
+
 const KanjiResult = mongoose.model('KanjiResult', kanjiResultSchema);
 
 //kanjivg
@@ -64,8 +68,17 @@ const KanjiResult = mongoose.model('KanjiResult', kanjiResultSchema);
 
 // app.use(express.static("public"));
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 // register
+
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path) => {
+    console.log('Serving static file:', path);
+  }
+}));
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.post('/register', async(req, res)=>{
   const {username, email, password, confirmPassword} = req.body;
@@ -121,7 +134,7 @@ app.post('/login', async(req, res)=>{
 
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public','html','index.html'));
@@ -139,16 +152,32 @@ app.get('/profile', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public/html/profile.html'));
 });
 
+// app.get('/word_connect_game', (req, res)=>{
+//   res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'word_connect_game.html'));
+// });
+
+app.get('/gamenoichu', (req, res)=>{
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'matchingame', 'gamenoichu.html'));
+});
+
 app.get('/word_connect_game', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'word_connect_game.html'));
 });
 
 app.get('/write_game', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'write_game.html'));
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'writegame', 'write_game.html'));
 });
 
-app.get('/botgame_kanjiLearned', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'botgame_kanjiLearned.html'));
+// app.get('/botgame_kanjiLearned', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'tsk', 'botgame', 'botgame_kanjiLearned.html'));
+// });
+
+app.get('/botgame', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'botgame', 'botgame.html'));
+});
+
+app.get('/game2', (req, res)=>{
+  res.sendFile(path.join(__dirname, 'public', 'tsk', 'game2', 'game2.html'));
 });
 
 app.post('/check-kanji', async (req, res) => {
