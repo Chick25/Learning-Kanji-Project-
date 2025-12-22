@@ -297,6 +297,13 @@
       </div>
       <p id="username"></p>
 
+      <div class="streak-container">
+        <div class="streak-box">
+          🔥 <strong>Chuỗi học:</strong> <span id="streakCount">0</span> ngày
+          <span id="streakMessage"></span>
+        </div>
+      </div>
+
       <div class="level-select">
           <span id='grade-1'>N5</span>
           <span id='grade-2'>N4</span>
@@ -437,6 +444,103 @@
       reader.readAsDataURL(file);
     }
   });
+
+(function() {
+  const today = new Date().toISOString().split('T')[0];
+  let streakData = JSON.parse(localStorage.getItem('kanji_streak') || '{}');
+
+  let hasActivityToday = false; // Chỉ true khi thực sự hoàn thành hoạt động
+
+  // Chỉ tính streak nếu có hoạt động hợp lệ (gọi từ game)
+  // Reload trang profile KHÔNG được tính là hoạt động
+
+  if (streakData.lastActivityDate === today) {
+    // Đã có hoạt động hôm nay (từ game gọi completeStreakUpdate)
+    hasActivityToday = true;
+  } else if (streakData.lastActivityDate) {
+    const diffDays = Math.floor((new Date(today) - new Date(streakData.lastActivityDate)) / 86400000);
+
+    if (diffDays === 1) {
+      streakData.count += 1;
+      hasActivityToday = true;
+    } else if (diffDays > 1) {
+      streakData.count = 1;
+      hasActivityToday = true;
+    }
+  } else {
+    // Lần đầu – chờ hoạt động thực sự
+    streakData.count = 0;
+  }
+
+  // CHỈ LƯU lastActivityDate KHI CÓ HOẠT ĐỘNG THỰC SỰ
+  // (Reload profile không lưu)
+  if (hasActivityToday) {
+    streakData.lastActivityDate = today;
+    localStorage.setItem('kanji_streak', JSON.stringify(streakData));
+  }
+
+  // Hiển thị
+  const countEl = document.getElementById('streakCount');
+  const boxEl = document.querySelector('.streak-box');
+  const msgEl = document.getElementById('streakMessage');
+
+  if (countEl && boxEl && msgEl) {
+    countEl.textContent = streakData.count || 0;
+
+    boxEl.classList.remove('dimmed', 'streak-milestone');
+    msgEl.textContent = "";
+    msgEl.classList.remove('streak-warning');
+
+    // Nếu chưa có hoạt động hôm nay → xám + cảnh báo
+    if (streakData.lastActivityDate !== today) {
+      boxEl.classList.add('dimmed');
+      msgEl.textContent = "⚠️ Học hôm nay để giữ chuỗi!";
+      msgEl.classList.add('streak-warning');
+    } else {
+      // Đã học hôm nay → hiệu ứng đẹp
+      if (streakData.count >= 100) {
+        boxEl.classList.add('streak-milestone');
+        msgEl.textContent = "🏆 THẦN THÁNH!";
+      } else if (streakData.count >= 50) {
+        boxEl.classList.add('streak-milestone');
+        msgEl.textContent = "🌟 HUYỀN THOẠI!";
+      } else if (streakData.count >= 30) {
+        boxEl.classList.add('streak-milestone');
+        msgEl.textContent = "💪 SIÊU PHÀM!";
+      } else if (streakData.count >= 10) {
+        msgEl.textContent = "🚀 Tuyệt vời!";
+      } else if (streakData.count >= 3) {
+        msgEl.textContent = "Giữ vững nhé!";
+      }
+    }
+  }
+})();
+
+// Hàm này chỉ được gọi từ game khi hoàn thành hoạt động
+window.completeStreakUpdate = function() {
+  // Force update streak với hoạt động hôm nay
+  const today = new Date().toISOString().split('T')[0];
+  let streakData = JSON.parse(localStorage.getItem('kanji_streak') || '{}');
+
+  if (streakData.lastActivityDate !== today) {
+    // Tính lại streak như bình thường
+    if (!streakData.lastActivityDate) {
+      streakData.count = 1;
+    } else {
+      const diffDays = Math.floor((new Date(today) - new Date(streakData.lastActivityDate)) / 86400000);
+      if (diffDays === 1) {
+        streakData.count += 1;
+      } else if (diffDays > 1) {
+        streakData.count = 1;
+      }
+    }
+    streakData.lastActivityDate = today;
+    localStorage.setItem('kanji_streak', JSON.stringify(streakData));
+  }
+
+  // Reload hoặc update trực tiếp nếu cần
+  location.reload(); // Đơn giản nhất: reload để thấy thay đổi
+};
 </script>
 
 </body>

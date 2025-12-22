@@ -9,14 +9,17 @@ body {
   margin: 0;
 }
 
-header {
-  background: #71A95A;
-  color: rgb(0, 0, 0);
-  /* text-align: center; */
-  padding: 20px;
-  font-size: 28px;
-  font-weight: 700;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+header{
+  background-color: #71A95A;
+  padding: 15px;
+  z-index: 2000;
+}
+
+header p{
+  font-weight: 500;
+  font-size: 30px;
+  margin: 0;
+  margin-left: 15px;
 }
 
 .underheader {

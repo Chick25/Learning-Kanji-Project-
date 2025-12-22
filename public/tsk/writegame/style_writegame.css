@@ -3,24 +3,18 @@ body {
   background: linear-gradient(135deg, #f0f7f4, #d9f0e6); 
   min-height: 100vh; margin: 0; 
 }
-header { 
-  background: #71A95A; 
-  color: rgb(0, 0, 0); 
-  /* text-align: center;  */
-  padding: 20px; 
-  font-size: 28px; 
-  font-weight: 700; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+header{
+  background-color: #71A95A;
+  padding: 15px;
+  z-index: 2000;
 }
 
 header p{
   font-weight: 500;
   font-size: 30px;
-  /* padding: 0; */
   margin: 0;
   margin-left: 15px;
 }
-
 .underheader { 
   display: flex; 
   justify-content: space-between; 
@@ -82,6 +76,58 @@ canvas {
   flex-wrap: wrap;
   margin: 20px 0;
 }
+
+.container {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;    /* ← QUAN TRỌNG NHẤT: xếp dọc */
+  align-items: center;       /* ← Căn giữa tất cả phần con theo chiều ngang */
+  justify-content: flex-start; /* hoặc center nếu muốn giữa theo chiều dọc */
+  min-height: calc(100vh - 180px);
+  gap: 40px;                 /* Khoảng cách giữa controls và center */
+}
+
+#controls {
+  width: 100%;
+  max-width: 400px;          /* Giới hạn chiều rộng để đẹp */
+  display: flex;
+  justify-content: center;   /* Căn giữa select bên trong */
+  margin: 20px 0;
+}
+
+#grade-select {
+  padding: 16px 16px;
+  font-size: 20px;
+  font-weight: 100;
+  border: 4px solid #71A95A;
+  border-radius: 16px;
+  background: white;
+  cursor: pointer;
+  min-width: 80px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(113,169,90,0.25);
+  transition: all 0.3s ease;
+}
+
+#grade-select:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(113,169,90,0.35);
+  border-color: #5d8a4d;
+}
+
+/* #grade-select {
+  padding: 14px 30px;
+  font-size: 18px;
+  font-weight: 600;
+  border: 3px solid #71A95A;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  min-width: 220px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(113,169,90,0.2);
+} */
+
 button {
   padding: 14px 32px;
   font-size: 18px;
