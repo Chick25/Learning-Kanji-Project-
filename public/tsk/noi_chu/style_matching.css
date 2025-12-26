@@ -59,7 +59,7 @@ header {
   padding: 35px 20px;
   border-radius: 20px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  font-size: 56px; /* Giảm từ 72px → 56px, đẹp và dễ đọc */
+  font-size: 40px; /* Giảm từ 72px → 56px, đẹp và dễ đọc */
   font-weight: 700;
   text-align: center;
   cursor: pointer;
@@ -67,6 +67,7 @@ header {
   border: 3px solid transparent;
   user-select: none;
   min-height: 120px;
+  width: 400px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -3,6 +3,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const meaningBox = document.getElementById("meaningBox");
 const resultDiv = document.getElementById("result");
+const popup = document.getElementById('popup');
 
 let currentKanji = "";
 let strokes = [];
@@ -14,6 +15,13 @@ let learnedKanji = [];
 let failCount = 0;
 let showedHint = false;
 let showedAnswer = false;
+
+let totalQuestions = 0;        // Số chữ cần viết
+let completedQuestions = 0;     // Số chữ đã hoàn thành (đúng)
+let correctCount = 0;           // Số chữ viết đúng hoàn toàn
+
+let availableKanji = [];     // Danh sách chữ còn lại để chọn (không lặp)
+let usedKanji = new Set();   // Tập hợp chữ đã dùng trong lượt chơi này
 
 const username = localStorage.getItem('username');
 if (!username) {
@@ -39,7 +47,15 @@ async function loadLearnedKanji() {
       meaningBox.innerHTML = "Bạn chưa học chữ nào! Hãy học trước ở trang chính.";
       return;
     }
+    completedQuestions = 0;
+    correctCount = 0;
+    availableKanji = [...learnedKanji]; // Copy toàn bộ
+    usedKanji = new Set();
+    
+    totalQuestions = learnedKanji.length;
+    
     nextQuestion();
+
   } catch (err) {
     meaningBox.innerHTML = "Lỗi kết nối server";
     console.error(err);
@@ -157,9 +173,22 @@ function getEndpoints(d) {
 }
 
 async function checkResult() {
+
   if (currentStroke >= strokes.length) {
+    correctCount++;
+    completedQuestions++;
     resultDiv.innerHTML = `<span class="correct">HOÀN THÀNH "${currentKanji}"! 🎉</span>`;
-    setTimeout(nextQuestion, 2000);
+    // setTimeout(nextQuestion, 2000);
+
+    if (completedQuestions >= totalQuestions) {
+      // ĐỦ 10 CHỮ → HIỆN KẾT QUẢ CUỐI
+      setTimeout(showFinalResult, 1500);
+      console.log(`Câu hoàn thành: ${completedQuestions}/${totalQuestions}, Đúng: ${correctCount}`);
+    } else {
+      // Chưa đủ → sang chữ mới
+      setTimeout(nextQuestion, 2000);
+    }
+
     resetHints();
     return;
   }
@@ -186,14 +215,20 @@ async function checkResult() {
   const lenM = Math.hypot(modelVec.dx, modelVec.dy);
 
   if (lenM > 5 && lenU > 20) {
-  const dot = (modelVec.dx * userVec.dx + modelVec.dy * userVec.dy) / (lenM * lenU);
+    const dot = (modelVec.dx * userVec.dx + modelVec.dy * userVec.dy) / (lenM * lenU);
   if (dot < -0.05) { // NGHIÊM NGẶT: chỉ cho phép lệch rất nhỏ
     failCount++;
     resultDiv.innerHTML = `<span class="wrong">SAI HƯỚNG NÉT ${currentStroke + 1}! Hãy vẽ đúng chiều nét mẫu (Lần ${failCount})</span>`;
     checkHint();
     return;
   }
-}
+  if (failCount >= 6) {
+      setTimeout(() => {
+        resultDiv.innerHTML = `<span style="color:#999">Chuyển sang chữ mới...</span>`;
+        skipOrWrong();
+      }, 2000);
+    }
+  } 
 
   // === KIỂM TRA HÌNH DẠNG NÉT (SIÊU NGHIÊM NGẶT) ===
   const tempCtx = document.createElement("canvas").getContext("2d");
@@ -224,6 +259,7 @@ async function checkResult() {
 
   if (currentStroke >= strokes.length) {
     setTimeout(() => {
+      correctCount++;
       resultDiv.innerHTML = `<span class="correct">HOÀN THÀNH "${currentKanji}"! 🎉</span>`;
       setTimeout(nextQuestion, 2000);
       resetHints();
@@ -240,6 +276,42 @@ async function checkResult() {
       checkHint();
     }
 }
+
+function skipOrWrong() {
+  completedQuestions++;
+  if (completedQuestions >= totalQuestions) {
+    setTimeout(showFinalResult, 1000);
+  } else {
+    setTimeout(nextQuestion, 1500);
+  }
+}
+
+function showFinalResult() {
+    // const accuracy = Math.round((correctCount / totalQuestions) * 100);
+    let message = "";
+    if (correctCount === totalQuestions) message = "HOÀN HẢO! Bạn viết đúng hết! 🏆✨";
+    else if (correctCount >= 8) message = "XUẤT SẮC! Rất giỏi! 🌟";
+    else if (correctCount >= 6) message = "TỐT! Cố gắng hơn nhé! 💪";
+    else message = "Học thêm để viết chuẩn hơn nào! 😊";
+
+    popup.innerHTML = `
+      <div style="background:white; padding:40px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2); text-align:center;">
+        <h2 style="font-size:42px; color:#71A95A; margin-bottom:20px;">🎉 Kết thúc!</h2>
+        <p style="font-size:32px; margin:20px 0;">Bạn đã viết đúng</p>
+        <p style="font-size:48px; font-weight:bold; color:#e67e22; margin:20px 0;">
+          ${correctCount}/${totalQuestions}
+        </p>
+        <p style="font-size:26px; margin:30px 0; color:#333;">${message}</p>
+        <button onclick="location.reload()" style="padding:16px 50px; font-size:20px; background:#71A95A; color:white; border:none; border-radius:50px; cursor:pointer; box-shadow:0 8px 20px rgba(113,169,90,0.3);">
+          Chơi lại
+        </button>
+      </div>
+    `;
+     popup.style.display = 'block';
+    // Hiệu ứng mượt
+    setTimeout(() => popup.style.opacity = '1', 50);
+}
+
 
 function checkHint() {
   if (failCount === 3 && !showedHint) {
@@ -306,7 +378,7 @@ function clearCanvas() {
 function undoLastStroke() {
   if (userStrokes.length > 0) {
     userStrokes.pop();
-    if (currentStrokeIndex > 0) currentStrokeIndex--;
+    if (currentStroke > 0) currentStroke--;
     render();
     resultDiv.innerHTML = `<span style="color:#ffa500">Đã xóa nét cuối. Vẽ lại nét ${currentStrokeIndex + 1}!</span>`;
 
@@ -320,18 +392,74 @@ function undoLastStroke() {
   }
 } 
 
+// async function nextQuestion() {
+//   if (completedQuestions >= totalQuestions){
+//     showFinalResult(); 
+//     return;
+//   }
+
+//   if (availableKanji.length === 0) {
+//     // Nếu hết chữ (ít hơn 10) → dùng lại từ đầu nhưng không lặp trong lượt này
+//     availableKanji = learnedKanji.filter(k => !usedKanji.has(k));
+//   }
+
+//   if (learnedKanji.length === 0) return;
+//   currentKanji = learnedKanji[Math.floor(Math.random() * learnedKanji.length)];
+//   meaningBox.innerHTML = `Write the kanji for: <strong>"${await getMeaning(currentKanji)}"</strong>`;
+//   strokes = await loadStrokes(currentKanji);
+//   userStrokes = [];
+//   currentStroke = 0;
+//   currentPoints = [];
+//   resetHints();
+//   clearCanvas();
+//   console.log("ok");
+//   skipOrWrong();
+// }
+
 async function nextQuestion() {
-  if (learnedKanji.length === 0) return;
-  currentKanji = learnedKanji[Math.floor(Math.random() * learnedKanji.length)];
-  meaningBox.innerHTML = `Write the kanji for: <strong>"${await getMeaning(currentKanji)}"</strong>`;
+  completedQuestions++;
+  if (completedQuestions >= totalQuestions) {
+    setTimeout(showFinalResult, 1500);
+    return;
+  }
+  // Nếu hết chữ trong available → không thể xảy ra vì đã giới hạn totalQuestions
+  if (availableKanji.length === 0) {
+    // An toàn: reset lại (không nên xảy ra)
+    availableKanji = learnedKanji.filter(k => !usedKanji.has(k));
+  }
+
+  // Chọn ngẫu nhiên từ availableKanji (không bao giờ lặp trong lượt chơi)
+  const randomIndex = Math.floor(Math.random() * availableKanji.length);
+  currentKanji = availableKanji[randomIndex];
+
+  // Xóa khỏi danh sách và thêm vào đã dùng
+  availableKanji.splice(randomIndex, 1);
+  usedKanji.add(currentKanji);
+
+  let meaning = "Không rõ nghĩa";
+  try {
+    meaning = await getMeaning(currentKanji);
+  } catch (err) {
+    console.warn(err);
+  }
+
+  meaningBox.innerHTML = `
+    Viết chữ có nghĩa: <strong>"${meaning}"</strong><br>
+    <small style="color:#666; font-size:18px;">Câu ${completedQuestions }/${totalQuestions}</small>
+  `;
+
   strokes = await loadStrokes(currentKanji);
   userStrokes = [];
   currentStroke = 0;
   currentPoints = [];
-  resetHints();
+  failCount = 0;
+  showedHint = false;
+  showedAnswer = false;
+
   clearCanvas();
-  console.log("ok");
+  resultDiv.innerHTML = "";
 }
+
 
 canvas.addEventListener("mousedown", e => {
   isDrawing = true;

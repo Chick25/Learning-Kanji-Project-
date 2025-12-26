@@ -59,26 +59,13 @@ const kanjiResultSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now }
 });
 
-
-
 const KanjiResult = mongoose.model('KanjiResult', kanjiResultSchema);
-
-//kanjivg
-// app.use("/kanji", express.static(path.join(__dirname, "kanjivg")));
-
-// app.use(express.static("public"));
-
-// app.use(express.static(path.join(__dirname, 'public')));
-// register
 
 app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders: (res, path) => {
     console.log('Serving static file:', path);
   }
 }));
-
-// app.use(express.static(path.join(__dirname, 'public')));
-
 
 app.post('/register', async(req, res)=>{
   const {username, email, password, confirmPassword} = req.body;
@@ -134,8 +121,6 @@ app.post('/login', async(req, res)=>{
 
 });
 
-// app.use(express.static(path.join(__dirname, 'public')));
-
 app.get('/', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public','html','index.html'));
 })
@@ -152,10 +137,6 @@ app.get('/profile', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public/html/profile.html'));
 });
 
-// app.get('/word_connect_game', (req, res)=>{
-//   res.sendFile(path.join(__dirname, 'public', 'tsk', 'noi_chu', 'word_connect_game.html'));
-// });
-
 app.get('/gamenoichu', (req, res)=>{
   res.sendFile(path.join(__dirname, 'public', 'tsk', 'matchingame', 'gamenoichu.html'));
 });
@@ -167,10 +148,6 @@ app.get('/word_connect_game', (req, res)=>{
 app.get('/write_game', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'tsk', 'writegame', 'write_game.html'));
 });
-
-// app.get('/botgame_kanjiLearned', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'public', 'tsk', 'botgame', 'botgame_kanjiLearned.html'));
-// });
 
 app.get('/botgame', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'tsk', 'botgame', 'botgame.html'));
@@ -217,7 +194,6 @@ app.post('/check-kanji', async (req, res) => {
   }
 });
 
-
 app.post('/learn', async(req, res)=>{
 
   try{ 
@@ -244,8 +220,6 @@ app.post('/learn', async(req, res)=>{
       progress: updatedUser.progress
     });
 
-    // console.log("Update progress:", username, level, kanji);
-
   }catch(err){
     console.log(err);
     res.status(500).json({error: 'Server is wrong'});
@@ -271,8 +245,6 @@ app.get('/learn', async(req, res)=>{
     res.status(500).json({err: 'Server is wrong'});
   }
 });
-
-
 // API lấy tiến độ học (gộp tất cả grade cho game)
 app.get('/api/progress', async (req, res) => {
   try {
@@ -285,7 +257,6 @@ app.get('/api/progress', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Không tìm thấy user' });
     }
-
     // Gộp tất cả chữ từ progress (grade-1, grade-2, ...)
     const allLearnedKanji = [];
     Object.values(user.progress || {}).forEach(gradeArray => {
@@ -363,9 +334,7 @@ app.get("/mnemonic", async(req, res)=>{
   }catch(err){
     res.status(500).json({error: "Lỗi khi lấy dữ liệu", details: err.message });
   }
-
 });
-
 
 app.listen(3000, () => {
   console.log('Server chạy ở http://localhost:3000');

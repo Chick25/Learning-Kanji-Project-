@@ -56,7 +56,8 @@ header p{
 .left {
   flex: 2;
   /* background: #fdf6ec; */
-  background-color: rgba(255, 255, 255, 0.5); 
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px); 
   /* border-right: 1px solid #ddd; */
   /* padding: 10px; */
   width: 200px;                   /* sidebar có chiều rộng cố định */
@@ -96,6 +97,14 @@ header p{
 
 .left.active {
   transform: translateX(0);
+}
+
+.left a {
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Nút toggle luôn nằm ở chính giữa mép trái */
