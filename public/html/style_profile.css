@@ -203,14 +203,15 @@ opacity: 0.5;
 }
 
 footer{
-background-color: #323232;
-padding: 20px;
-/* text-align: center; */
+  background-color: #323232;
+  padding: 30px;
 }
 footer p{
-font-size: 14px;
-color: #fdf6ec;
+  font-size: large;
+  color: #fdf6ec;
+  margin: 0;
 }
+
 
 .logout-wrap {
 display: flex;
@@ -326,9 +327,7 @@ header{
 .logout-btn{
     width: 150px;
 }
-footer{
-    height: 150px;
-}
+
 .kanji-grid {
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     gap: 10px;

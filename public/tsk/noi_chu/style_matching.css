@@ -198,9 +198,9 @@ header {
 footer {
   background: #333;
   color: white;
-  padding: 25px;
-  text-align: center;
-  font-size: 16px;
+  padding: 30px;
+  /* text-align: center; */
+  font-size: large;
 }
 
 /* RESPONSIVE – ĐẸP TRÊN MOBILE */

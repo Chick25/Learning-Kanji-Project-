@@ -240,8 +240,6 @@ function speakJapanese(text){
   }
 }
 
-
-
 function randomKanji() {
   const cells = Array.from(document.querySelectorAll(".kanji-cell"));
   const randomCell = cells[Math.floor(Math.random() * cells.length)];
@@ -250,7 +248,6 @@ function randomKanji() {
 
 function clearCanvas() {
   drawCtx.clearRect(0, 0, 400, 400);
-  
   document.getElementById("result").textContent = "";
   userStrokes = [];
   currentStrokePoints = [];
@@ -260,7 +257,6 @@ function clearCanvas() {
 }
 
 let isDrawing = false;
-
 
 canvas.addEventListener("mousedown", (e)=>{
   isDrawing = true;
@@ -299,8 +295,6 @@ canvas.addEventListener("mouseup", ()=>{
     drawStrokeNumbers();
 });
 
-
-
 canvas.addEventListener("mouseleave", () => {
   isDrawing = false;
 });
@@ -312,7 +306,6 @@ function getMousePos(e) {
     y: e.clientY - rect.top
   };
 }
-
 
 async function loadKanjiList() {
   const res = await fetch("https://kanjiapi.dev/v1/kanji/grade-1");
@@ -420,7 +413,6 @@ async function loadKanjiByLevel() {
 const img = document.getElementById('preview');
 img.src = localStorage.getItem('profileImage')
 
-
 const toggleBtn = document.getElementById("toggleSidebar");
 const sidebar = document.getElementById("sidebar");
 
@@ -527,7 +519,6 @@ async function checkResult() {
   }
 
   const currentPoints = userStroke;
-
   // === 1. KIỂM TRA HƯỚNG NÉT ===
   const modelEndpoints = getStrokeEndpoints(currentPathString);
   const modelVector = {

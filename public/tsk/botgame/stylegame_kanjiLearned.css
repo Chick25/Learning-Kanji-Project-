@@ -148,7 +148,8 @@ button:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0
   line-height: 1.6; 
 }
 footer { 
-  text-align: center; 
+  /* text-align: center;  */
+  font-size: large;
   padding: 30px; 
   background: #323232; 
   color: #f7f6f6;

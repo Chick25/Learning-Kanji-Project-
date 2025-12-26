@@ -22,21 +22,23 @@
     }
 
     body {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Yu Mincho', 'Noto Serif JP', 'MS Mincho', serif;
         background: #f4f6f8;
-        color: #333;
+        color: #000000;
     }
     
-    header{
-      background-color: #71A95A;
-      padding: 18px 25px;
-      text-align: left;
-      color: #000000;
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    }
+   header{
+  background-color: #71A95A;
+  padding: 15px;
+  z-index: 2000;
+}
+
+header p{
+  font-weight: 500;
+  font-size: 30px;
+  margin: 0;
+  margin-left: 15px;
+}
 
     main {
         flex: 1;
@@ -142,15 +144,15 @@
       opacity: 0.5;
     }
 
-    footer{
-        background-color: #323232;
-        padding: 20px;
-        text-align: center;
-    }
-    footer p{
-      font-size: 14px;
-      color: #fdf6ec;
-    }
+  footer{
+  background-color: #323232;
+  padding: 30px;
+}
+footer p{
+  font-size: large;
+  color: #fdf6ec;
+  margin: 0;
+}
 
     .logout-wrap {
         display: flex;
@@ -283,9 +285,7 @@
 </head>
 <body>
 
-  <header>
-    Learning Kanji
-  </header>
+  <header><p>Learning Kanji</p></header>
 
   <main>
     <div class="profile-container">
@@ -335,7 +335,7 @@
   </div>
 
   <footer>
-    <p>© 2025 - CTTNHH 2 thành viên</p>
+    <p>CTTNHH 2 THÀNH VIÊN</p>
   </footer>
 
 <script>
